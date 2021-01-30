@@ -1,0 +1,36 @@
+{
+  "folders": [
+    {
+      "name": "pot",
+      "path": "../pot"
+    },
+    {
+      "name": "backend",
+      "path": "../backend"
+    },
+    {
+      "name": "mobile",
+      "path": "../mobile"
+    },
+    {
+      "path": ".."
+    }
+  ],
+  "settings": {
+    "sqltools.connections": [
+      {
+        "mysqlOptions": {
+          "authProtocol": "default"
+        },
+        "previewLimit": 50,
+        "server": "localhost",
+        "port": 3306,
+        "driver": "MySQL",
+        "name": "smart_pot",
+        "database": "smart_pot",
+        "username": "root",
+        "password": ""
+      }
+    ]
+  }
+}
