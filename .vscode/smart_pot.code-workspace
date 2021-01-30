@@ -1,6 +1,9 @@
 {
   "folders": [
     {
+      "path": ".."
+    },
+    {
       "name": "pot",
       "path": "../pot"
     },
@@ -11,9 +14,6 @@
     {
       "name": "mobile",
       "path": "../mobile"
-    },
-    {
-      "path": ".."
     }
   ],
   "settings": {
