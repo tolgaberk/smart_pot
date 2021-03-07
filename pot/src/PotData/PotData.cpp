@@ -8,6 +8,12 @@ PotData::PotData(Api *newApi)
 
 PotData::~PotData()
 {
+    environment_temp = 0;
+    environment_humidity = 0;
+    soil_moisture = 0;
+    tank_filled_ratio = 0;
+    // environment_light_density = 0;
+    close_light_density = 0;
 }
 
 void PotData::setPotId(int id)
@@ -27,7 +33,7 @@ String PotData::toString()
                          ", \"environment_humidity\" :" + environment_humidity +
                          ", \"soil_moisture\" : " + soil_moisture +
                          ", \"tank_filled_ratio\" :" + tank_filled_ratio +
-                         ", \"environment_light_density\" : " + environment_light_density +
+                        //  ", \"environment_light_density\" : " + environment_light_density +
                          ", \"close_light_density\" : " + close_light_density +
                          ", \"last_time_watered\" : " + last_time_watered +
                          ", \"is_lights_open\" : " + is_lights_open +
@@ -54,7 +60,7 @@ void PotData::print()
                          ", \"environment_humidity\" :" + environment_humidity +
                          ", \"soil_moisture\" : " + soil_moisture +
                          ", \"tank_filled_ratio\" :" + tank_filled_ratio +
-                         ", \"environment_light_density\" : " + environment_light_density +
+                        //  ", \"environment_light_density\" : " + environment_light_density +
                          ", \"close_light_density\" : " + close_light_density +
                          ", \"last_time_watered\" : " + last_time_watered +
                          ", \"is_lights_open\" : " + is_lights_open +

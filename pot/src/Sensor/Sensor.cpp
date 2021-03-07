@@ -18,7 +18,8 @@ float *Sensor::readValue()
         delayMicroseconds(100);
         last_read = millis();
         value = analogRead(pin);
-        Serial.println("Pin Number: " + String(pin) + "  =>  " + String(value));
+        Serial.println("Pin Number: " + String(controlPin) + "  =>  " + String(value));
+        delayMicroseconds(100);
         digitalWrite(controlPin, LOW);
     }
     return &value;

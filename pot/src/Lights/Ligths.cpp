@@ -5,25 +5,31 @@
 Lights::Lights(int pin, PotData *potData)
 {
     this->pin = pin;
+    pinMode(pin, OUTPUT);
     this->potData = potData;
 }
 
 void Lights::work()
 {
-    float illuminationAvg = (potData->close_light_density + potData->environment_light_density) / 2;
-    if (illuminationAvg < ILLUMINATION_LIMIT)
+    if (potData->close_light_density < ILLUMINATION_LIMIT)
     {
         isWorking = true;
         potData->is_lights_open = true;
         //
         digitalWrite(pin, HIGH);
+        Serial.println("ISIK YANIYOR AMK");
         /// PRODUCE A PWM SIGNAL FOR LIGHTS
         ////
-        digitalWrite(pin, LOW);
-        potData->sendPotData(true);
+
+        // potData->sendPotData(true);
         //
-        potData->setIsWatering(false);
+    }
+    else
+    {
+        Serial.println("ISIK SONUYOR AMK");
+        digitalWrite(pin, LOW);
         isWorking = false;
+        potData->is_lights_open = false;
     }
 }
 

@@ -1,7 +1,7 @@
 #include "./PotData/PotData.h"
 #include <Arduino.h>
 
-#define SAMPLING_INTERVAL 5000
+#define SAMPLING_INTERVAL 2000
 
 class Sensor
 {

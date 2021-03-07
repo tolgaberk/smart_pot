@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "Api/Api.h"
 
-#define REQUEST_INTERVAL 5000
+#define REQUEST_INTERVAL 2000
 #ifndef POTDATA_H
 #define POTDATA_H
 class PotData
