@@ -8,7 +8,8 @@ private:
     bool isWorking;
 
 public:
-    Lights(int pin, PotData *potData);
+    Lights();
+    void setup(int pin, PotData *potData);
     void work();
     ~Lights();
 };

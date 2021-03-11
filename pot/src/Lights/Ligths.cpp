@@ -2,22 +2,26 @@
 
 #define ILLUMINATION_LIMIT 150
 
-Lights::Lights(int pin, PotData *potData)
-{
-    this->pin = pin;
-    pinMode(pin, OUTPUT);
-    this->potData = potData;
+Lights::Lights()
+{   
 }
 
+void Lights::setup(int pin, PotData *potData){
+    this->pin = pin;
+    this->potData = potData;
+    Serial.println("LightsPin");
+    Serial.println(this->pin);
+    pinMode(this->pin, OUTPUT);
+}
 void Lights::work()
 {
-    if (potData->close_light_density < ILLUMINATION_LIMIT)
+    if (potData->close_light_density > ILLUMINATION_LIMIT)
     {
         isWorking = true;
         potData->is_lights_open = true;
         //
-        digitalWrite(pin, HIGH);
-        Serial.println("ISIK YANIYOR AMK");
+        digitalWrite(pin, LOW);
+        Serial.println("ISIK YANIYOR");
         /// PRODUCE A PWM SIGNAL FOR LIGHTS
         ////
 
@@ -26,8 +30,8 @@ void Lights::work()
     }
     else
     {
-        Serial.println("ISIK SONUYOR AMK");
-        digitalWrite(pin, LOW);
+        Serial.println("ISIK SONUYOR");
+        digitalWrite(pin, HIGH);
         isWorking = false;
         potData->is_lights_open = false;
     }

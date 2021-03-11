@@ -15,11 +15,11 @@ float *Sensor::readValue()
     if ((millis() - last_read) > SAMPLING_INTERVAL)
     {
         digitalWrite(controlPin, HIGH);
-        delayMicroseconds(100);
+        delay(100);
         last_read = millis();
         value = analogRead(pin);
         Serial.println("Pin Number: " + String(controlPin) + "  =>  " + String(value));
-        delayMicroseconds(100);
+        delay(100);
         digitalWrite(controlPin, LOW);
     }
     return &value;
