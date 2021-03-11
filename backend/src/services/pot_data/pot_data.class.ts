@@ -25,6 +25,7 @@ export class PotData extends Service<IPotData> {
         data.last_time_watered = new Date(0);
       }
     }
+    data.environment_light_density = -1;
     await super.create(data, params);
 
     // return value will be a command to the smart pot
