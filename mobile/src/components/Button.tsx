@@ -1,20 +1,46 @@
 import React, { FC } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  Pressable,
+  ViewStyle,
+  StyleProp,
+} from 'react-native';
 import colors from '../config/colors';
 
 interface ButtonProps {
   text: string;
+  style?: StyleProp<ViewStyle>;
+  onPress: () => void;
 }
 
-const Button: FC<ButtonProps> = ({ text }) => {
+const Button: FC<ButtonProps> = ({ text, onPress, style }) => {
   return (
-    <View style={styles.container}>
+    <Pressable
+      style={pressableStyle([styles.container, style])}
+      onPress={onPress}>
       <Text>{text}</Text>
-    </View>
+    </Pressable>
   );
 };
+const pressableStyle = (style: StyleProp<ViewStyle>) => ({
+  pressed,
+}: {
+  pressed: boolean;
+}): StyleProp<ViewStyle> => [
+  {
+    opacity: pressed ? 0.8 : 1,
+  },
+  style,
+];
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: colors.primary },
+  container: {
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
 });
 export default Button;

@@ -23,3 +23,7 @@ type IPot = {
   ip: string;
   MAC: string;
 };
+
+export interface ICamera {
+  data: { id: string; data: string };
+}

@@ -14,6 +14,10 @@
     {
       "name": "mobile",
       "path": "../mobile"
+    },
+    {
+      "name": "streamer",
+      "path": "../streamer"
     }
   ],
   "settings": {
@@ -31,6 +35,7 @@
         "username": "root",
         "password": ""
       }
-    ]
+    ],
+    "liveServer.settings.multiRootWorkspaceName": "code"
   }
 }
