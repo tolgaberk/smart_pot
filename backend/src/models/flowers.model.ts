@@ -10,7 +10,19 @@ export default function (app: Application): typeof Model {
     'flowers',
     {
       name: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      family: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      source: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },
@@ -28,6 +40,11 @@ export default function (app: Application): typeof Model {
     // Define associations here
     flowers.hasMany(models.pot_data, {
       foreignKey: 'current_flower_id',
+      onDelete: 'NO ACTION',
+      foreignKeyConstraint: false,
+    });
+    flowers.hasMany(models.images, {
+      foreignKey: 'resourceId',
       onDelete: 'NO ACTION',
       foreignKeyConstraint: false,
     });

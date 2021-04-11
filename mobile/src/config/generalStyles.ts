@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+const generalStyles = StyleSheet.create({
   flex: {
     flex: 1,
   },
@@ -12,4 +12,4 @@ const styles = StyleSheet.create({
   alignCenter: { alignItems: 'center' },
   debug: { borderWidth: 2 },
 });
-export default styles;
+export default generalStyles;

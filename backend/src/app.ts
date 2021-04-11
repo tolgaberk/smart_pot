@@ -4,7 +4,6 @@ import feathers, {
   HookContext as FeathersHookContext,
 } from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio';
-
 import compress from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -16,7 +15,9 @@ import channels from './channels';
 import { Application } from './declarations';
 import logger from './logger';
 import middleware from './middleware';
+import serviceless_models from './models/serviceless_models';
 import routes from './routes';
+import seeder from './seeder';
 import sequelize from './sequelize';
 import services from './services';
 import socket from './socket';
@@ -46,12 +47,13 @@ app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 app.use('/', express.static(app.get('public')));
 
 // Set up Plugins and providers
+
 app.configure(express.rest());
 
 app.configure(socketio(socket));
-
 app.configure(sequelize);
 app.configure(routes);
+app.configure(serviceless_models);
 
 // Configure other middleware (see `middleware/index.ts`)
 app.configure(middleware);
@@ -68,4 +70,5 @@ app.use(express.errorHandler({ logger } as any));
 
 app.hooks(appHooks);
 
+app.configure(seeder);
 export default app;

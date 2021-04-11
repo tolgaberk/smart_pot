@@ -11,7 +11,6 @@ export default function (app: Application): void {
   app.on('connection', (connection: any): void => {
     // On a new real-time connection, add it to the anonymous channel
     app.channel('anonymous').join(connection);
-    console.log('new user!!', connection);
   });
 
   app.on('login', (authResult: any, { connection }: any): void => {

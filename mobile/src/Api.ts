@@ -1,3 +1,4 @@
+import feathers from '@feathersjs/feathers';
 import axios from 'axios';
 import {
   EventOnAddStream,
@@ -9,16 +10,16 @@ import {
   RTCSessionDescription,
 } from 'react-native-webrtc';
 import io from 'socket.io-client';
-// import feathers from '@feathersjs/feathers';
-// import socketio from '@feathersjs/socketio-client';
-
-export class Api {
+import authentication from '@feathersjs/authentication-client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import socketio from '@feathersjs/socketio-client';
+export class ApiClass {
   url = 'http://192.168.1.112:9876';
   axios = axios;
   socket!: SocketIOClient.Socket;
   peer!: RTCPeerConnection;
   stream!: MediaStream;
-  // feathers: feathers.Application;
+  feathers: feathers.Application;
 
   getStreams() {
     console.log(this.peer);
@@ -41,8 +42,14 @@ export class Api {
       console.log(error);
     });
 
-    // this.feathers = feathers();
+    this.feathers = feathers();
+    this.feathers.configure(socketio(this.socket));
 
+    this.feathers.configure(
+      authentication({
+        storage: AsyncStorage,
+      }),
+    );
     // this.feathers.configure(socketio(this.socket));
   }
 
@@ -102,6 +109,8 @@ export class Api {
   close() {
     this.socket.emit('disconnectPeer');
   }
+
+  async login() {}
 }
 
-export default new Api();
+export default new ApiClass();
