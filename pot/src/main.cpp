@@ -27,10 +27,10 @@ void setup()
 {
   pinMode(A0, INPUT);
   Serial.begin(9600);
-  wifiManager.autoConnect("Smava_Smart_Pot");
+  wifiManager.autoConnect("Smart_Pot");
 
   //
-  lights.setup(D5, &globalPotData);
+  lights.setup(D8, &globalPotData);
   globalPotData.setPotId(api.registerDevice());
 
   envTempHumidSensor.setup(D0, DHTesp::DHT11);
@@ -43,20 +43,18 @@ void loop()
   globalPotData.close_light_density = *closeLightSensor.readValue();
 
   float envHumid = envTempHumidSensor.getHumidity();
-  if (isnan(envHumid) == false)
+  if (!isnan(envHumid))
   {
     globalPotData.environment_humidity = envHumid;
   }
 
   float envTemp = envTempHumidSensor.getTemperature();
-  if (isnan(envTemp) == false)
+  if (!isnan(envTemp))
   {
     globalPotData.environment_temp = envTemp;
   }
 
-  // pump.work();
   lights.work();
   globalPotData.print();
-  globalPotData.sendPotData();
-  delay(1000);
+  // globalPotData.sendPotData();
 }

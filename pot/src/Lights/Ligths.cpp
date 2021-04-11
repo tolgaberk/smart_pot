@@ -3,10 +3,11 @@
 #define ILLUMINATION_LIMIT 150
 
 Lights::Lights()
-{   
+{
 }
 
-void Lights::setup(int pin, PotData *potData){
+void Lights::setup(int pin, PotData *potData)
+{
     this->pin = pin;
     this->potData = potData;
     Serial.println("LightsPin");
@@ -20,7 +21,7 @@ void Lights::work()
         isWorking = true;
         potData->is_lights_open = true;
         //
-        digitalWrite(pin, LOW);
+        digitalWrite(pin, HIGH);
         Serial.println("ISIK YANIYOR");
         /// PRODUCE A PWM SIGNAL FOR LIGHTS
         ////
@@ -31,7 +32,7 @@ void Lights::work()
     else
     {
         Serial.println("ISIK SONUYOR");
-        digitalWrite(pin, HIGH);
+        digitalWrite(pin, LOW);
         isWorking = false;
         potData->is_lights_open = false;
     }

@@ -28,17 +28,17 @@ void PotData::setIsWatering(bool val)
 
 String PotData::toString()
 {
-    String stringified = "{ " +
+    String stringified = "{ \n" +
                          (String) " \"environment_temp\" :" + (String)environment_temp +
-                         ", \"environment_humidity\" :" + environment_humidity +
-                         ", \"soil_moisture\" : " + soil_moisture +
-                         ", \"tank_filled_ratio\" :" + tank_filled_ratio +
-                        //  ", \"environment_light_density\" : " + environment_light_density +
-                         ", \"close_light_density\" : " + close_light_density +
-                         ", \"last_time_watered\" : " + last_time_watered +
-                         ", \"is_lights_open\" : " + is_lights_open +
-                         ", \"pot_id\" : " + pot_id +
-                         "}";
+                         ", \n\t\"environment_humidity\" :" + environment_humidity +
+                         ", \n\t\"soil_moisture\" : " + soil_moisture +
+                         ", \n\t\"tank_filled_ratio\" :" + tank_filled_ratio +
+                         //  ", \n\t\"environment_light_density\" : " + environment_light_density +
+                         ", \n\t\"close_light_density\" : " + close_light_density +
+                         ", \n\t\"last_time_watered\" : " + last_time_watered +
+                         ", \n\t\"is_lights_open\" : " + is_lights_open +
+                         ", \n\t\"pot_id\" : " + pot_id +
+                         "\n}";
     return stringified;
 }
 
@@ -55,17 +55,5 @@ void PotData::sendPotData(bool force)
 
 void PotData::print()
 {
-    String stringified = "{ " +
-                         (String) " \"environment_temp\" :" + (String)environment_temp +
-                         ", \"environment_humidity\" :" + environment_humidity +
-                         ", \"soil_moisture\" : " + soil_moisture +
-                         ", \"tank_filled_ratio\" :" + tank_filled_ratio +
-                        //  ", \"environment_light_density\" : " + environment_light_density +
-                         ", \"close_light_density\" : " + close_light_density +
-                         ", \"last_time_watered\" : " + last_time_watered +
-                         ", \"is_lights_open\" : " + is_lights_open +
-                         ", \"pot_id\" : " + pot_id +
-                         "}";
-
-    Serial.println(stringified);
+    Serial.println(this->toString());
 }
