@@ -15,8 +15,12 @@ import channels from './channels';
 import { Application } from './declarations';
 import logger from './logger';
 import middleware from './middleware';
+import serviceless_models from './models/serviceless_models';
+import routes from './routes';
+import seeder from './seeder';
 import sequelize from './sequelize';
 import services from './services';
+import socket from './socket';
 
 // Don't remove this comment. It's needed to format import lines nicely.
 
@@ -36,19 +40,24 @@ app.use(
 app.use(cors());
 app.use(compress());
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
 app.use('/', express.static(app.get('public')));
 
 // Set up Plugins and providers
-app.configure(express.rest());
-app.configure(socketio());
 
+app.configure(express.rest());
+
+app.configure(socketio(socket));
 app.configure(sequelize);
+app.configure(routes);
+app.configure(serviceless_models);
 
 // Configure other middleware (see `middleware/index.ts`)
 app.configure(middleware);
+
 app.configure(authentication);
 // Set up our services (see `services/index.ts`)
 app.configure(services);
@@ -61,4 +70,5 @@ app.use(express.errorHandler({ logger } as any));
 
 app.hooks(appHooks);
 
+app.configure(seeder);
 export default app;

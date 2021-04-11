@@ -3,6 +3,8 @@ import users from './users/users.service';
 import potData from './pot_data/pot_data.service';
 import pots from './pots/pots.service';
 import flowers from './flowers/flowers.service';
+import camera from './camera/camera.service';
+import blogs from './blogs/blogs.service';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application): void {
@@ -10,4 +12,6 @@ export default function (app: Application): void {
   app.configure(potData);
   app.configure(pots);
   app.configure(flowers);
+  app.configure(camera);
+  app.configure(blogs);
 }

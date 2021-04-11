@@ -1,4 +1,4 @@
-
+import addImage from '../../hooks/add-image';
 export default {
   before: {
     all: [],
@@ -7,17 +7,17 @@ export default {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   after: {
     all: [],
-    find: [],
-    get: [],
+    find: [addImage()],
+    get: [addImage()],
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   error: {
@@ -27,6 +27,6 @@ export default {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
+    remove: [],
+  },
 };

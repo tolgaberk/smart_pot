@@ -1,6 +1,6 @@
 {
   "host": "localhost",
-  "port": 5555,
+  "port": 9876,
   "public": "../public/",
   "paginate": {
     "default": 10,
@@ -15,10 +15,10 @@
       "header": {
         "typ": "access"
       },
-      "audience": "https://yourdomain.com",
+      "audience": "https://smartpot.online",
       "issuer": "feathers",
       "algorithm": "HS256",
-      "expiresIn": "1d"
+      "expiresIn": "365d"
     },
     "local": {
       "usernameField": "email",
