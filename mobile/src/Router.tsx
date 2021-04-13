@@ -8,12 +8,16 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
+import { Pressable, StyleSheet, Text } from 'react-native';
 import { Calendar, Membership, Vase } from './assets/icons';
 import colors from './config/colors';
 import useReduxSelector from './hooks/useReduxSelector';
+import { logoutAction } from './redux/auth/authActions';
+import { asyncDispatch } from './redux/configureStore';
 import FlowerDetail from './screens/FlowerDetail';
 import FlowersList from './screens/FlowersList';
 import LoginRegister from './screens/LoginRegister';
+import MyMembership from './screens/MyMembership';
 import MyPot from './screens/MyPot';
 import MyPots from './screens/MyPots';
 
@@ -37,7 +41,7 @@ function Router() {
   );
 }
 
-const customDrawer = (
+const CustomDrawer = (
   props: DrawerContentComponentProps<DrawerContentOptions>,
 ) => {
   const filteredProps = {
@@ -45,23 +49,31 @@ const customDrawer = (
     state: {
       ...props.state,
       routeNames: props.state.routeNames.filter(
-        (routeName) => routeName !== 'FlowerDetail',
+        (routeName) => routeName !== 'FlowerDetail' && routeName !== 'MyPot',
       ),
       routes: props.state.routes.filter(
-        (route) => route.name !== 'FlowerDetail',
+        (route) => route.name !== 'FlowerDetail' && route.name !== 'MyPot',
       ),
     },
   };
   return (
     <DrawerContentScrollView {...filteredProps}>
       <DrawerItemList {...filteredProps} />
+      <Pressable
+        style={styles.cikisYapButton}
+        onPress={async () => {
+          await asyncDispatch(logoutAction());
+          console.log(props.navigation.navigate('Login'));
+        }}>
+        <Text style={{ color: colors.whiteText }}>Çıkış yap</Text>
+      </Pressable>
     </DrawerContentScrollView>
   );
 };
 
 function DrawerNavigator() {
   return (
-    <Drawer.Navigator drawerContent={customDrawer} detachInactiveScreens>
+    <Drawer.Navigator drawerContent={CustomDrawer} detachInactiveScreens>
       <Drawer.Screen
         options={{
           drawerLabel: 'Çiçek ve Bitkiler',
@@ -76,7 +88,7 @@ function DrawerNavigator() {
           drawerIcon: ({ color }) => <Membership color={color} />,
         }}
         name="MyMembership"
-        component={MyPot}
+        component={MyMembership}
       />
       <Drawer.Screen
         options={{
@@ -87,6 +99,7 @@ function DrawerNavigator() {
         component={MyPots}
       />
       <Drawer.Screen name="FlowerDetail" component={FlowerDetail} />
+      <Drawer.Screen name="MyPot" component={MyPot} />
     </Drawer.Navigator>
   );
 }
@@ -105,3 +118,15 @@ function RootNavigator() {
   );
 }
 export default Router;
+
+const styles = StyleSheet.create({
+  cikisYapButton: {
+    alignItems: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    marginHorizontal: 8,
+    marginVertical: 8,
+    backgroundColor: colors.primary,
+    padding: 8,
+    borderRadius: 8,
+  },
+});

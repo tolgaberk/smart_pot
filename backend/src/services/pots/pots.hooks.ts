@@ -1,4 +1,5 @@
-
+import addFlower from '../../hooks/add-flower-image';
+import addAllInfo from '../../hooks/add_all_info';
 export default {
   before: {
     all: [],
@@ -7,17 +8,17 @@ export default {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   after: {
     all: [],
-    find: [],
-    get: [],
+    find: [addFlower()],
+    get: [addAllInfo()],
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   error: {
@@ -27,6 +28,6 @@ export default {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
+    remove: [],
+  },
 };

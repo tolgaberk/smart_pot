@@ -20,9 +20,14 @@ export const loginAction: ActionCreator<ActionParams['login']> = (
         email: params.email,
         password: params.password,
       });
+      console.log(res);
       dispatch({
         type: 'AUTH_SUCCESS',
-        payload: { email: params.email, token: res?.accessToken },
+        payload: {
+          email: params.email,
+          token: res?.accessToken,
+          id: res.user.id,
+        },
       });
     } catch (err) {
       Alert.alert('HATA', 'Giriş bilgilerinizi kontrol ediniz', [
@@ -33,15 +38,16 @@ export const loginAction: ActionCreator<ActionParams['login']> = (
     }
   } else {
     try {
-      await Api.feathers.service('users').create(params);
+      const user = await Api.feathers.service('users').create(params);
       res = await Api.feathers.authenticate({
         strategy: 'local',
         email: params.email,
         password: params.password,
       });
+
       dispatch({
         type: 'AUTH_SUCCESS',
-        payload: { email: params.email, token: res?.accessToken },
+        payload: { email: params.email, token: res?.accessToken, id: user.id },
       });
     } catch (err) {
       Alert.alert('HATA', 'Daha önce üye olmadığınızdan emin olunuz.', [
@@ -51,4 +57,8 @@ export const loginAction: ActionCreator<ActionParams['login']> = (
       throw 'error';
     }
   }
+};
+
+export const logoutAction: ActionCreator<any> = () => async (dispatch) => {
+  dispatch({ type: 'AUTH_RESET' });
 };

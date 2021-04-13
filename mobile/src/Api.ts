@@ -1,4 +1,4 @@
-import feathers from '@feathersjs/feathers';
+import feathers, { Service } from '@feathersjs/feathers';
 import axios from 'axios';
 import {
   EventOnAddStream,
@@ -19,7 +19,10 @@ export class ApiClass {
   socket!: SocketIOClient.Socket;
   peer!: RTCPeerConnection;
   stream!: MediaStream;
-  feathers: feathers.Application;
+  feathers: feathers.Application<{
+    pot_data: Service<IPotData>;
+    pots: Service<IPot>;
+  }>;
 
   getStreams() {
     console.log(this.peer);

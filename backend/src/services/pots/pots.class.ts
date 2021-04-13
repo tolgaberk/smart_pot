@@ -14,7 +14,7 @@ export class Pots extends Service {
 
   async create(data: { data: string }, params: Params): Promise<any> {
     const [ip, MAC] = data.data.split('&&');
-    const pot: IPot = { ip, MAC };
+    const pot: Partial<IPot> = { ip, MAC };
     const exists = await this.find({ query: { MAC } });
     console.log(exists);
     let id;

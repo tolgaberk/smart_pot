@@ -25,6 +25,7 @@ type ReducerType = Reducer<ReducerState, Actions>;
  * Ilgili redux statei
  */
 interface ReducerState {
+  id?: number;
   email?: string;
   password?: string;
   isLoggedIn: boolean;
@@ -38,13 +39,17 @@ type LoginAction = {
 };
 type AuthSuccessAction = {
   type: 'AUTH_SUCCESS';
-  payload?: { email: string; token: string };
+  payload?: { email: string; token: string; id: number };
 };
 type AuthFailedAction = {
   type: 'AUTH_FAILED';
   payload?: undefined;
 };
+type AuthReset = {
+  type: 'AUTH_RESET';
+  payload?: undefined;
+};
 
-type Actions = LoginAction | AuthSuccessAction | AuthFailedAction;
+type Actions = LoginAction | AuthSuccessAction | AuthFailedAction | AuthReset;
 
 type ActionCreator = (params: any) => Actions;

@@ -16,14 +16,29 @@ interface IPotData {
   current_flower_id: number;
 }
 
-type IPot = {
+export interface ICamera {
+  data: { id: string; data: string };
+}
+
+interface IImage {
+  id: number;
+  path: string;
+  resourceId: number;
+  createdAt: Date;
+  updatedAt: Date;
+  flowerId: number;
+  blogId: number;
+}
+
+interface IPot {
+  images: IImage[];
   id?: number;
   name?: string;
   user_id?: number;
-  ip: string;
   MAC: string;
-};
-
-export interface ICamera {
-  data: { id: string; data: string };
+  ip: string;
+  createdAt: string;
+  updatedAt: string;
+  current_flower?: number;
+  data?: IPotData[];
 }

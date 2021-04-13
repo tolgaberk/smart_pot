@@ -7,7 +7,7 @@ import { Application, IPot } from '../declarations';
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
 
-  const pots = sequelizeClient.define<Model<IPot, any>>(
+  const pots = sequelizeClient.define<Model<Partial<IPot>, any>>(
     'pots',
     {
       id: { primaryKey: true, type: DataTypes.INTEGER, autoIncrement: true },
@@ -44,6 +44,7 @@ export default function (app: Application): typeof Model {
     // Define associations here
     pots.hasMany(models.pot_data, { foreignKey: 'pot_id' });
     pots.belongsTo(models.users, { foreignKey: 'user_id' });
+    pots.belongsTo(models.flowers, { foreignKey: 'current_flower' });
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
 

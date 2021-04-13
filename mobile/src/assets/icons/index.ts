@@ -4,3 +4,4 @@ export { default as Membership } from './Membership';
 export { default as Search } from './Search';
 export { default as Shop } from './Shop';
 export { default as Vase } from './Vase';
+export { default as Back } from './Back';

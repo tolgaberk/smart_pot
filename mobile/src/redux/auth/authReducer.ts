@@ -1,6 +1,7 @@
 import { ReducerState, ReducerType } from './types';
 
 const initialState: ReducerState = {
+  id: undefined,
   email: undefined,
   isLoggedIn: false,
   password: undefined,
@@ -12,9 +13,12 @@ const authReducer: ReducerType = (state = initialState, action) => {
       state.isLoggedIn = true;
       state.token = action.payload?.token;
       state.email = action.payload?.email;
+      state.id = action.payload?.id;
       state.password = undefined;
       break;
     case 'AUTH_FAILED':
+      return { ...initialState };
+    case 'AUTH_RESET':
       return { ...initialState };
     case 'AUTH':
       state.email = action.payload?.email;

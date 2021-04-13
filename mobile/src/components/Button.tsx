@@ -15,6 +15,7 @@ interface ButtonProps {
   textSize?: number;
   style?: StyleProp<ViewStyle>;
   onPress: () => void;
+  disabled?: boolean;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -23,10 +24,16 @@ const Button: FC<ButtonProps> = ({
   style,
   textSize = 16,
   textColor = colors.whiteText,
+  disabled = false,
 }) => {
+  const localStyle = [styles.container, style];
+  if (disabled) {
+    localStyle.push({ backgroundColor: 'gray' });
+  }
   return (
     <Pressable
-      style={pressableStyle([styles.container, style])}
+      disabled={disabled}
+      style={pressableStyle(localStyle)}
       onPress={onPress}>
       <Text style={{ color: textColor, fontSize: textSize }}>{text}</Text>
     </Pressable>

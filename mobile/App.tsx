@@ -13,6 +13,12 @@ import Router from './src/Router';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './src/redux/configureStore';
 import { Provider as StoreProvider } from 'react-redux';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/tr';
+dayjs.extend(relativeTime);
+dayjs.locale('tr');
+
 const App = () => {
   return (
     <StoreProvider store={store}>
