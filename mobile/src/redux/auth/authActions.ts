@@ -30,6 +30,7 @@ export const loginAction: ActionCreator<ActionParams['login']> = (
         },
       });
     } catch (err) {
+      console.log(err);
       Alert.alert('HATA', 'Giriş bilgilerinizi kontrol ediniz', [
         { text: 'Tamam' },
       ]);
@@ -50,6 +51,7 @@ export const loginAction: ActionCreator<ActionParams['login']> = (
         payload: { email: params.email, token: res?.accessToken, id: user.id },
       });
     } catch (err) {
+      console.log(err);
       Alert.alert('HATA', 'Daha önce üye olmadığınızdan emin olunuz.', [
         { text: 'Tamam' },
       ]);

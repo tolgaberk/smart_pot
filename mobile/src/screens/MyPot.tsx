@@ -20,7 +20,9 @@ const MyPot: FC<MyPotProps> = () => {
   const [stream, setStream] = useState<MediaStream>();
   const [pot, setPot] = useState<IPot>();
   const [loading, setLoading] = useState(true);
-  const [searchingStream, setSearchingStream] = useState(false);
+  const [searchingStream, setSearchingStream] = useState<
+    'not_searching' | 'searching' | 'found'
+  >('not_searching');
   const getter = useCallback(() => {
     Api.feathers
       .service('pots')
@@ -71,8 +73,13 @@ const MyPot: FC<MyPotProps> = () => {
     Api.initRTC((newStream) => {
       setStream((_) => newStream);
       scrollRef.current?.scrollTo({ x: 0 });
+      setSearchingStream('found');
     });
-    setSearchingStream(true);
+    setSearchingStream('searching');
+  };
+  const closeRTC = () => {
+    setSearchingStream('not_searching');
+    Api.closeRTC();
   };
   return (
     <SafeAreaView style={generalStyles.flex}>
@@ -178,9 +185,15 @@ const MyPot: FC<MyPotProps> = () => {
       </ScrollView>
       <Button
         style={{ marginHorizontal: 64, marginVertical: 16 }}
-        disabled={searchingStream}
-        text={searchingStream ? 'Yayın Aranıyor...' : 'Yayın İzlemeyi Başlat'}
-        onPress={initRTC}
+        disabled={searchingStream === 'searching'}
+        text={
+          searchingStream === 'searching'
+            ? 'Yayın Aranıyor...'
+            : searchingStream === 'not_searching'
+            ? 'Yayın İzlemeyi Başlat'
+            : 'Yayını kapat'
+        }
+        onPress={searchingStream === 'not_searching' ? initRTC : closeRTC}
       />
     </SafeAreaView>
   );

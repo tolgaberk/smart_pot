@@ -13,7 +13,7 @@ import { Calendar, Membership, Vase } from './assets/icons';
 import colors from './config/colors';
 import useReduxSelector from './hooks/useReduxSelector';
 import { logoutAction } from './redux/auth/authActions';
-import { asyncDispatch } from './redux/configureStore';
+import { asyncDispatch, getReduxState } from './redux/configureStore';
 import FlowerDetail from './screens/FlowerDetail';
 import FlowersList from './screens/FlowersList';
 import LoginRegister from './screens/LoginRegister';
@@ -59,14 +59,24 @@ const CustomDrawer = (
   return (
     <DrawerContentScrollView {...filteredProps}>
       <DrawerItemList {...filteredProps} />
-      <Pressable
-        style={styles.cikisYapButton}
-        onPress={async () => {
-          await asyncDispatch(logoutAction());
-          console.log(props.navigation.navigate('Login'));
-        }}>
-        <Text style={{ color: colors.whiteText }}>Çıkış yap</Text>
-      </Pressable>
+      {getReduxState().authState.isLoggedIn ? (
+        <Pressable
+          style={styles.cikisYapButton}
+          onPress={async () => {
+            await asyncDispatch(logoutAction());
+            props.navigation.navigate('Login');
+          }}>
+          <Text style={{ color: colors.whiteText }}>Çıkış yap</Text>
+        </Pressable>
+      ) : (
+        <Pressable
+          style={styles.cikisYapButton}
+          onPress={async () => {
+            props.navigation.navigate('Login');
+          }}>
+          <Text style={{ color: colors.whiteText }}>Giriş yap</Text>
+        </Pressable>
+      )}
     </DrawerContentScrollView>
   );
 };

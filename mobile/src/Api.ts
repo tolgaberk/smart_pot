@@ -14,7 +14,7 @@ import authentication from '@feathersjs/authentication-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import socketio from '@feathersjs/socketio-client';
 export class ApiClass {
-  url = 'http://192.168.1.112:9876';
+  url = 'https://smartpot.online';
   axios = axios;
   socket!: SocketIOClient.Socket;
   peer!: RTCPeerConnection;
@@ -22,6 +22,7 @@ export class ApiClass {
   feathers: feathers.Application<{
     pot_data: Service<IPotData>;
     pots: Service<IPot>;
+    users: Service<IUser>;
   }>;
 
   getStreams() {
@@ -53,7 +54,6 @@ export class ApiClass {
         storage: AsyncStorage,
       }),
     );
-    // this.feathers.configure(socketio(this.socket));
   }
 
   initRTC(cb: (stream: MediaStream) => void) {
@@ -109,8 +109,8 @@ export class ApiClass {
     });
     this.socket.emit('watcher');
   }
-  close() {
-    this.socket.emit('disconnectPeer');
+  closeRTC() {
+    this.socket.emit('disconnect');
   }
 
   async login() {}
