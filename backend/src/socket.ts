@@ -13,6 +13,12 @@ export default (io: io.Server): void => {
       socket.to(broadcaster).emit('watcher', socket.id);
     });
     socket.on('disconnect', () => {
+      console.log(
+        'disconnect from broadcaster',
+        broadcaster,
+        '\nwho? => ',
+        socket.id,
+      );
       socket.to(broadcaster).emit('disconnectPeer', socket.id);
     });
     socket.on('offer', (id, message) => {
