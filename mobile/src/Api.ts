@@ -57,7 +57,19 @@ export class ApiClass {
   }
 
   initRTC(cb: (stream: MediaStream) => void) {
-    let peerConnection: RTCPeerConnection;
+    this.socket.on('offer', this.onOffer(cb).bind(this));
+    this.socket.on('candidate', this.onCandidate.bind(this));
+    this.socket.emit('watcher');
+  }
+  closeRTC() {
+    console.log('DISCONNECT FROM PEER');
+    this.socket.emit('disconnect');
+  }
+
+  private onOffer = (cb: (stream: MediaStream) => void) => (
+    id: any,
+    description: RTCSessionDescription,
+  ) => {
     const config: RTCPeerConnectionConfiguration = {
       iceServers: [
         {
@@ -71,47 +83,39 @@ export class ApiClass {
         },
       ],
     };
+    this.peer = new RTCPeerConnection(config);
+    this.peer
+      .setRemoteDescription(description)
+      .then(() => this.peer.createAnswer())
+      .then((sdp) => this.peer.setLocalDescription(sdp))
+      .then(() => {
+        this.socket.emit('answer', id, this.peer.localDescription);
+      });
 
-    this.socket.on('offer', (id: any, description: RTCSessionDescription) => {
-      peerConnection = new RTCPeerConnection(config);
-      this.peer = peerConnection;
-      peerConnection
-        .setRemoteDescription(description)
-        .then(() => peerConnection.createAnswer())
-        .then((sdp) => peerConnection.setLocalDescription(sdp))
-        .then(() => {
-          this.socket.emit('answer', id, peerConnection.localDescription);
-        });
+    this.peer.onaddstream = (event: EventOnAddStream) => {
+      this.stream = event.stream;
+      cb(this.stream);
+      console.log('stream registered', event.stream.id);
+    };
+    this.peer.onicecandidate = (event) => {
+      if (event.candidate) {
+        this.socket.emit('candidate', id, event.candidate);
+      }
+    };
+  };
 
-      peerConnection.onaddstream = (event: EventOnAddStream) => {
-        this.stream = event.stream;
-        cb(this.stream);
-        console.log('stream registered', event.stream.id);
-      };
-      peerConnection.onicecandidate = (event) => {
-        if (event.candidate) {
-          this.socket.emit('candidate', id, event.candidate);
-        }
-      };
-    });
+  // private onAddStream =
+  // private onIceCandidate =
 
-    this.socket.on('candidate', (id: any, candidate: RTCIceCandidateType) => {
-      peerConnection
-        .addIceCandidate(new RTCIceCandidate(candidate))
-        .catch((e) => console.error(e));
-    });
-    this.socket.on('connect', () => {
-      this.socket.emit('watcher');
-    });
+  private onCandidate = (id: any, candidate: RTCIceCandidateType) => {
+    this.peer
+      .addIceCandidate(new RTCIceCandidate(candidate))
+      .catch((e) => console.error(e));
+  };
 
-    this.socket.on('broadcaster', () => {
-      this.socket.emit('watcher');
-    });
-    this.socket.emit('watcher');
-  }
-  closeRTC() {
-    this.socket.emit('disconnect');
-  }
+  // private onConnect =
+
+  // private onBroadCaster =
 
   async login() {}
 }

@@ -82,6 +82,7 @@ socket.on("connect", () => {
 
   socket.on("disconnectPeer", (id: any) => {
     addStatus(`disconnected ${id}`);
+    console.log(peerConnections);
     peerConnections[id].close();
     delete peerConnections[id];
   });
