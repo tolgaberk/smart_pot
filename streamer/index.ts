@@ -1,8 +1,14 @@
 import io from "socket.io-client";
 
-const socket = io("http://192.168.1.112:9876");
+const socket = io("https://smartpot.online");
 
-var video = document.createElement("video");
+const statusText = document.querySelector(".status")!;
+
+const video = document.createElement("video");
+
+function addStatus(txt: string) {
+  statusText.innerHTML += `<h2>${txt}</h2>`;
+}
 
 if (navigator.mediaDevices.getUserMedia) {
   navigator.mediaDevices
@@ -20,6 +26,7 @@ if (navigator.mediaDevices.getUserMedia) {
 // socket.on("camera_data", (data: string) => img && (img.src = data));
 
 socket.on("connect", () => {
+  addStatus("Connected To Socket");
   console.log("connected");
 
   const peerConnections: Record<any, RTCPeerConnection> = {};
@@ -38,6 +45,7 @@ socket.on("connect", () => {
   };
 
   socket.on("watcher", (id: any) => {
+    addStatus(`New Watcher ${id}`);
     const peerConnection = new RTCPeerConnection(config);
     peerConnections[id] = peerConnection;
 
