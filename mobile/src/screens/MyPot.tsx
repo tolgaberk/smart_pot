@@ -197,14 +197,6 @@ const MyPot: FC<MyPotProps> = () => {
         }
         onPress={searchingStream === 'not_searching' ? initRTC : closeRTC}
       />
-      <Button
-        style={{ marginHorizontal: 64, marginVertical: 16 }}
-        text={'test'}
-        onPress={() => {
-          console.log(Api.stream, Api.peer);
-          Api.socket.emit('watcher');
-        }}
-      />
     </SafeAreaView>
   );
 };
