@@ -13,6 +13,7 @@ import io from 'socket.io-client';
 import authentication from '@feathersjs/authentication-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import socketio from '@feathersjs/socketio-client';
+import { Alert } from 'react-native';
 export class ApiClass {
   url = 'https://smartpot.online';
   axios = axios;
@@ -39,10 +40,8 @@ export class ApiClass {
       console.log('connected');
     });
 
-    this.socket.on('disconnect', () => {
-      console.log('disconnected');
-    });
     this.socket.on('error', (error: any) => {
+      Alert.alert('Hata', 'Bir hata oluştu daha sonra tekrar deneyiniz');
       console.log(error);
     });
 
@@ -98,13 +97,20 @@ export class ApiClass {
         .addIceCandidate(new RTCIceCandidate(candidate))
         .catch((e) => console.error(e));
     });
+    this.socket.on('broadcaster', () => {
+      this.socket.emit('watcher');
+    });
 
     this.socket.emit('watcher');
   }
   closeRTC() {
+    console.log('asdasd');
+    this.socket.emit('disconnectFromBroadcaster');
+    (this.stream as any) = null;
+    (this.peer as any) = null;
     this.socket.removeListener('offer');
     this.socket.removeListener('candidate');
-    this.socket.emit('disconnect');
+    this.socket.removeListener('broadcaster');
   }
 
   async login() {}

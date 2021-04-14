@@ -12,7 +12,7 @@ export default (io: io.Server): void => {
       console.log('New Watcher', socket.id);
       socket.to(broadcaster).emit('watcher', socket.id);
     });
-    socket.on('disconnect', () => {
+    socket.on('disconnectFromBroadcaster', () => {
       console.log(
         'disconnect from broadcaster',
         broadcaster,

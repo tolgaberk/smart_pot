@@ -80,6 +80,8 @@ const MyPot: FC<MyPotProps> = () => {
   const closeRTC = () => {
     setSearchingStream('not_searching');
     Api.closeRTC();
+    setStream(undefined);
+    Api.socket.emit('disconnect');
   };
   return (
     <SafeAreaView style={generalStyles.flex}>
@@ -194,6 +196,14 @@ const MyPot: FC<MyPotProps> = () => {
             : 'Yayını kapat'
         }
         onPress={searchingStream === 'not_searching' ? initRTC : closeRTC}
+      />
+      <Button
+        style={{ marginHorizontal: 64, marginVertical: 16 }}
+        text={'test'}
+        onPress={() => {
+          console.log(Api.stream, Api.peer);
+          Api.socket.emit('watcher');
+        }}
       />
     </SafeAreaView>
   );
