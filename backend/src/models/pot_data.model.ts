@@ -18,36 +18,36 @@ export default function (app: Application): typeof Model {
       },
       environment_temp: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
       },
       environment_humidity: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
       },
       soil_moisture: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
       },
       tank_filled_ratio: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
       },
       environment_light_density: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
       },
       close_light_density: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
       },
       last_time_watered: {
         //  NodeMCU da saat modulu olmadigindan true veya false gelecek true geldiginde saati setleyecegiz.
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       is_lights_open: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
       },
       pot_id: {
         type: DataTypes.INTEGER,

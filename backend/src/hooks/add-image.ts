@@ -3,19 +3,21 @@
 import { Hook, HookContext } from '@feathersjs/feathers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default (): Hook => {
+export default (key = 'flowerId'): Hook => {
   return async (context: HookContext): Promise<HookContext> => {
     const { app, result, params } = context;
     const seq = app.get('sequelizeClient');
-    const addImages = async (flower) => {
+    const addImages = async (entity) => {
       // Get the user based on their id, pass the `params` along so
       // that we get a safe version of the user data
-      const flowerId = flower.id;
-      const images = await seq.models.images.findAll({ where: { flowerId } });
+      const relatedId = entity.id;
+      const images = await seq.models.images.findAll({
+        where: { [key]: relatedId },
+      });
 
       // Merge the message content to include the `user` object
       return {
-        ...flower,
+        ...entity,
         images,
       };
     };

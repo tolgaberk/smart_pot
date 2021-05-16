@@ -10,7 +10,7 @@ export default function (app: Application): typeof Model {
     'blogs',
     {
       text: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       title: {

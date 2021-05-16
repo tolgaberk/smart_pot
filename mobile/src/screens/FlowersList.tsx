@@ -14,14 +14,17 @@ import colors from '../config/colors';
 import generalStyles from '../config/generalStyles';
 import { pressableStyle } from '../helpers/pressableStyle';
 import { Header } from '../components/Header';
+import { Paginated } from '@feathersjs/feathers';
 interface FlowersListProps {}
 
 const FlowersList: FC<FlowersListProps> = () => {
-  const [flowers, setFlowers] = useState<{ data: IFlower[] }>({ data: [] });
+  const [flowers, setFlowers] = useState<IFlower[]>([]);
   const [loading, setLoading] = useState(true);
   const getter = async () => {
-    const res = await Api.feathers.service('flowers').find();
-    setFlowers(res);
+    const res = (await Api.feathers
+      .service('flowers')
+      .find()) as Paginated<IFlower>;
+    setFlowers(res.data);
     setLoading(false);
   };
   useEffect(() => {
@@ -39,7 +42,7 @@ const FlowersList: FC<FlowersListProps> = () => {
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={reload} />
         }
-        data={flowers.data}
+        data={flowers}
         style={generalStyles.flex}
         contentContainerStyle={generalStyles.flex}
         numColumns={2}
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     marginVertical: 8,
   },
-  image: { height: 150, width: 150 },
+  image: { height: 150, width: 150, borderRadius: 5, elevation: 5 },
   itemTitle: {
     fontWeight: '400',
     fontSize: 20,
@@ -75,18 +78,17 @@ const FlowerCard: FC<FlowerCardProps> = ({ flower }) => {
   const uri = Api.url + flower.images[0]?.path;
   const navigation = useNavigation();
   const onPress = (id: number) => () => {
-    navigation.navigate('FlowerDetail', { id: id });
+    navigation.navigate('FlowerDetail', { id });
   };
   return (
     <Pressable
       onPress={onPress(flower.id)}
       style={pressableStyle({
-        paddingHorizontal: 4,
-        paddingTop: 8,
-        paddingBottom: 4,
+        padding: 8,
         borderRadius: 8,
         alignItems: 'center',
         backgroundColor: colors.card,
+        elevation: 2,
       })}>
       <FastImage source={{ uri }} style={styles.image} />
       <Text text={flower.name} style={styles.itemTitle} />

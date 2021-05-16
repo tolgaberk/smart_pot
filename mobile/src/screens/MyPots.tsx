@@ -9,8 +9,10 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Api from '../Api';
+import { PlusSquare } from '../assets/icons';
 import { Text } from '../components';
 import { Header } from '../components/Header';
+import RegisterPotModal from '../components/RegisterPotModal';
 import colors from '../config/colors';
 import generalStyles from '../config/generalStyles';
 import { pressableStyle } from '../helpers/pressableStyle';
@@ -37,9 +39,24 @@ const MyPots: FC<MyPotsProps> = () => {
     getter();
   };
 
+  const onRegisterPot = () => {
+    setModalVisible((_) => !_);
+  };
+  const onClose = () => setModalVisible(false);
+
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <SafeAreaView style={generalStyles.flex}>
-      <Header title="Saksılarım" />
+      <Header
+        title="Saksılarım"
+        Right={() => (
+          <Pressable
+            style={pressableStyle({ paddingLeft: 24 })}
+            onPress={onRegisterPot}>
+            <PlusSquare color={colors.black} />
+          </Pressable>
+        )}
+      />
       <FlatList
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={reload} />
@@ -52,6 +69,11 @@ const MyPots: FC<MyPotsProps> = () => {
         columnWrapperStyle={styles.columWrapper}
         renderItem={({ item }) => <PotCard pot={item} />}
       />
+      <RegisterPotModal
+        visible={modalVisible}
+        onClose={onClose}
+        onRegistered={reload}
+      />
     </SafeAreaView>
   );
 };
@@ -60,9 +82,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     marginVertical: 8,
   },
-  image: { height: 150, width: 150 },
+  image: { height: 150, width: 150, borderRadius: 8, elevation: 5 },
   itemTitle: {
-    fontWeight: '400',
     fontSize: 20,
     marginTop: 8,
     color: colors.primary,
@@ -78,18 +99,19 @@ const PotCard: FC<PotCardProps> = ({ pot }) => {
   const uri = Api.url + pot.images[0]?.path;
   const navigation = useNavigation();
   const onPress = (id: number) => () => {
-    navigation.navigate('MyPot', { id: id });
+    navigation.navigate('MyPot', { id });
   };
   return (
     <Pressable
       onPress={onPress(pot.id)}
       style={pressableStyle({
-        paddingHorizontal: 4,
+        paddingHorizontal: 8,
         paddingTop: 8,
         paddingBottom: 4,
         borderRadius: 8,
         alignItems: 'center',
         backgroundColor: colors.card,
+        elevation: 2,
       })}>
       <FastImage source={{ uri }} style={styles.image} />
       <Text text={pot.name} style={styles.itemTitle} />

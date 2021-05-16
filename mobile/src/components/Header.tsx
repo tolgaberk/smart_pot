@@ -5,10 +5,11 @@ import { Back, BurgerMenu } from '../assets/icons';
 import colors from '../config/colors';
 import { pressableStyle } from '../helpers/pressableStyle';
 
-export const Header: FC<{ title: string; leftIsBack?: boolean }> = ({
-  leftIsBack,
-  title,
-}) => {
+export const Header: FC<{
+  title: string;
+  leftIsBack?: boolean;
+  Right?: () => JSX.Element;
+}> = ({ leftIsBack, title, Right }) => {
   const navigation = useNavigation();
   return (
     <View style={styles.headerContainer}>
@@ -30,7 +31,7 @@ export const Header: FC<{ title: string; leftIsBack?: boolean }> = ({
       <View style={styles.center}>
         <Text style={styles.headerTitle}>{title}</Text>
       </View>
-      <View style={styles.right} />
+      <View style={styles.right}>{Right && <Right />}</View>
     </View>
   );
 };

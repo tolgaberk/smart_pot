@@ -18,8 +18,9 @@ if (navigator.mediaDevices.getUserMedia) {
       socket.emit("broadcaster");
       video && (video.srcObject = stream);
     })
-    .catch(function (err0r) {
+    .catch(function (err) {
       console.log("Something went wrong!");
+      console.error(err);
     });
 }
 

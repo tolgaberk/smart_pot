@@ -1,27 +1,51 @@
 #include "Sensor.h"
 
-Sensor::Sensor(int pinNumber, int controlPinNumber, PotData *pot_data)
+Sensor::Sensor(int pinNumberOnMp, PotData *pot_data, Multiplexer *mp)
 {
-    pin = pinNumber;
-    controlPin = controlPinNumber;
-    pinMode(controlPin, OUTPUT);
-    potData = pot_data;
-    value = -1;
-    last_read = millis();
+    this->pinNumberOnMp = pinNumberOnMp;
+    this->potData = pot_data;
+    this->mp = mp;
+    this->value = -1;
+    this->last_read = millis();
 }
 
 float *Sensor::readValue()
 {
-    if ((millis() - last_read) > SAMPLING_INTERVAL)
+    unsigned long fromStart = millis();
+    if ((fromStart - last_read) > SAMPLING_INTERVAL)
     {
-        digitalWrite(controlPin, HIGH);
-        delay(500);
-        last_read = millis();
-        value = analogRead(pin);
-        delay(500);
-        digitalWrite(controlPin, LOW);
+        this->setActive();
+        delayMicroseconds(50);
+        last_read = fromStart;
+        value = analogRead(A0);
+        delayMicroseconds(50);
     }
     return &value;
+}
+
+void Sensor::setActive()
+{
+    if (this->pinNumberOnMp == 0)
+    {
+        return this->mp->setControlPins(0, 0);
+    }
+    if (this->pinNumberOnMp == 1)
+    {
+        return this->mp->setControlPins(1, 0);
+    }
+    if (this->pinNumberOnMp == 2)
+    {
+        return this->mp->setControlPins(0, 1);
+    }
+    if (this->pinNumberOnMp == 3)
+    {
+        return this->mp->setControlPins(1, 1);
+    }
+}
+
+int Sensor::getPinOnMp()
+{
+    return pinNumberOnMp;
 }
 
 Sensor::~Sensor()

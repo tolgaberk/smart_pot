@@ -1,7 +1,8 @@
 // A mapping of service names to types. Will be extended in service files.
 export interface ServiceTypes {}
 // The application instance type that will be used everywhere else
-export type Application = import('@feathersjs/express').Application<ServiceTypes>;
+export type Application =
+  import('@feathersjs/express').Application<ServiceTypes>;
 interface IPotData {
   id: number;
   environment_temp: number;
@@ -32,7 +33,7 @@ interface IImage {
 
 interface IPot {
   images: IImage[];
-  id?: number;
+  id: number;
   name?: string;
   user_id?: number;
   MAC: string;
@@ -41,4 +42,16 @@ interface IPot {
   updatedAt: string;
   current_flower?: number;
   data?: IPotData[];
+  flower?: IFlower;
+}
+
+interface IFlower {
+  id: number;
+  name: string;
+  family: string;
+  source: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  images?: IImage[];
 }

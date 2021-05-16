@@ -1,6 +1,10 @@
 export { default as BurgerMenu } from './BurgerMenu';
 export { default as Calendar } from './Calendar';
-export { default as Membership } from './Membership';
-export { default as Search } from './Search';
-export { default as Shop } from './Shop';
-export { default as Vase } from './Vase';
+export { default as Codepen } from './Codepen';
+export { default as Edit3 } from './Edit3';
+export { default as Feather } from './Feather';
+export { default as Plant } from './Plant';
+export { default as PlusSquare } from './PlusSquare';
+export { default as Sun } from './Sun';
+export { default as User } from './User';
+export { default as Back } from './Back';

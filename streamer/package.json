@@ -9,7 +9,8 @@
     "@feathersjs/feathers": "^4.5.11",
     "@feathersjs/socketio": "^4.5.11",
     "@feathersjs/socketio-client": "^4.5.11",
-    "parcel": "1.12.3"
+    "parcel": "1.12.3",
+    "socket.io": "^4.0.2"
   },
   "devDependencies": {
     "@babel/helper-define-map": "^7.13.12",

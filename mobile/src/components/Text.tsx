@@ -11,6 +11,7 @@ const Text: FC<CustomTextProps> = (props) => {
   return (
     <RNText {...props} style={[{ fontFamily: 'Montserrat-Regular' }, style]}>
       {props.text ?? ''}
+      {props.children}
     </RNText>
   );
 };

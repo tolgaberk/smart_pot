@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import socketio from '@feathersjs/socketio-client';
 import { Alert } from 'react-native';
 export class ApiClass {
-  url = 'https://smartpot.online';
+  url = 'http://10.0.2.2:9876';
   axios = axios;
   socket!: SocketIOClient.Socket;
   peer!: RTCPeerConnection;
@@ -24,6 +24,8 @@ export class ApiClass {
     pot_data: Service<IPotData>;
     pots: Service<IPot>;
     users: Service<IUser>;
+    flowers: Service<IFlower>;
+    blogs: Service<IBlog>;
   }>;
 
   getStreams() {

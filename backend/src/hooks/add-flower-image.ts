@@ -13,7 +13,6 @@ export default (): Hook => {
       const flowerId = pot.current_flower;
       const images = await seq.models.images.findAll({ where: { flowerId } });
 
-      // Merge the message content to include the `user` object
       return {
         ...pot,
         images,

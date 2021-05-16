@@ -8,7 +8,7 @@ function SvgBurgerMenu(props: SvgProps) {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M0 12.5h18v-2H0v2zm0-5h18v-2H0v2zm0-7v2h18v-2H0z"
-        fill="#000"
+        fill={props.color}
       />
     </Svg>
   );

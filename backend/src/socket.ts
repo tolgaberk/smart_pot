@@ -1,8 +1,11 @@
+import { Application } from '@feathersjs/feathers';
 import io from 'socket.io';
-export default (io: io.Server): void => {
+import { ServiceTypes } from './declarations';
+export default (io: io.Server, app: Application<ServiceTypes>): void => {
   let broadcaster: any;
 
   io.on('connection', (socket) => {
+    // ! RTC socket commands
     socket.on('broadcaster', () => {
       broadcaster = socket.id;
       console.log('New Broadcaster', broadcaster);
@@ -32,6 +35,27 @@ export default (io: io.Server): void => {
     socket.on('candidate', (id, message) => {
       console.log('New Candidate', message);
       socket.to(id).emit('candidate', socket.id, message);
+    });
+
+    //
+
+    socket.on('water', (potId, callback) => {
+      console.log('wants to water =>', potId);
+
+      try {
+        callback(app.service('pot-data').water(potId));
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    socket.on('light_toggle', (potId, callback) => {
+      console.log('wants to toggle =>', potId);
+      try {
+        callback(app.service('pot-data').light_toggle(potId));
+      } catch (err) {
+        console.error(err);
+      }
     });
   });
 

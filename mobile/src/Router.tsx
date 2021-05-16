@@ -8,12 +8,15 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
-import { Calendar, Membership, Vase } from './assets/icons';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Sun, User, Codepen, Feather } from './assets/icons';
 import colors from './config/colors';
+import generalStyles from './config/generalStyles';
 import useReduxSelector from './hooks/useReduxSelector';
 import { logoutAction } from './redux/auth/authActions';
 import { asyncDispatch, getReduxState } from './redux/configureStore';
+import BlogDetail from './screens/BlogDetail';
+import Blog from './screens/BlogsList';
 import FlowerDetail from './screens/FlowerDetail';
 import FlowersList from './screens/FlowersList';
 import LoginRegister from './screens/LoginRegister';
@@ -37,28 +40,34 @@ function Router() {
     },
   };
   return (
-    <NavigationContainer theme={theme}>{RootNavigator()}</NavigationContainer>
+    <NavigationContainer theme={theme}>
+      <RootNavigator />
+    </NavigationContainer>
   );
 }
 
 const CustomDrawer = (
   props: DrawerContentComponentProps<DrawerContentOptions>,
 ) => {
+  const nonShownItems = ['FlowerDetail', 'MyPot', 'BlogDetail'];
   const filteredProps = {
     ...props,
     state: {
       ...props.state,
       routeNames: props.state.routeNames.filter(
-        (routeName) => routeName !== 'FlowerDetail' && routeName !== 'MyPot',
+        (routeName) => !nonShownItems.includes(routeName),
       ),
       routes: props.state.routes.filter(
-        (route) => route.name !== 'FlowerDetail' && route.name !== 'MyPot',
+        (route) => !nonShownItems.includes(route.name),
       ),
     },
   };
   return (
-    <DrawerContentScrollView {...filteredProps}>
+    <DrawerContentScrollView
+      {...filteredProps}
+      contentContainerStyle={generalStyles.flex}>
       <DrawerItemList {...filteredProps} />
+      <View style={generalStyles.flex} />
       {getReduxState().authState.isLoggedIn ? (
         <Pressable
           style={styles.cikisYapButton}
@@ -83,11 +92,15 @@ const CustomDrawer = (
 
 function DrawerNavigator() {
   return (
-    <Drawer.Navigator drawerContent={CustomDrawer} detachInactiveScreens>
+    <Drawer.Navigator drawerContent={CustomDrawer} detachInactiveScreens={true}>
       <Drawer.Screen
         options={{
           drawerLabel: 'Çiçek ve Bitkiler',
-          drawerIcon: ({ color }) => <Calendar color={color} />,
+          drawerIcon: ({ color }) => (
+            <View style={styles.iconContainer}>
+              <Sun color={color} />
+            </View>
+          ),
         }}
         name="Flowers"
         component={FlowersList}
@@ -95,7 +108,11 @@ function DrawerNavigator() {
       <Drawer.Screen
         options={{
           drawerLabel: 'Üyeliğim',
-          drawerIcon: ({ color }) => <Membership color={color} />,
+          drawerIcon: ({ color }) => (
+            <View style={styles.iconContainer}>
+              <User color={color} />
+            </View>
+          ),
         }}
         name="MyMembership"
         component={MyMembership}
@@ -103,12 +120,29 @@ function DrawerNavigator() {
       <Drawer.Screen
         options={{
           drawerLabel: 'Saksılarım',
-          drawerIcon: ({ color }) => <Vase color={color} />,
+          drawerIcon: ({ color }) => (
+            <View style={styles.iconContainer}>
+              <Codepen color={color} />
+            </View>
+          ),
         }}
         name="Pots"
         component={MyPots}
       />
+      <Drawer.Screen
+        options={{
+          drawerLabel: 'Blog',
+          drawerIcon: ({ color }) => (
+            <View style={styles.iconContainer}>
+              <Feather color={color} />
+            </View>
+          ),
+        }}
+        name="Blog"
+        component={Blog}
+      />
       <Drawer.Screen name="FlowerDetail" component={FlowerDetail} />
+      <Drawer.Screen name="BlogDetail" component={BlogDetail} />
       <Drawer.Screen name="MyPot" component={MyPot} />
     </Drawer.Navigator>
   );
@@ -123,13 +157,13 @@ function RootNavigator() {
         <Stack.Screen name="Login" component={LoginRegister} />
       )}
       <Stack.Screen name="App" component={DrawerNavigator} />
-      <Stack.Screen name="Pot" component={MyPot} />
     </Stack.Navigator>
   );
 }
 export default Router;
 
 const styles = StyleSheet.create({
+  iconContainer: { width: 30, alignItems: 'center' },
   cikisYapButton: {
     alignItems: 'center',
     borderWidth: StyleSheet.hairlineWidth,

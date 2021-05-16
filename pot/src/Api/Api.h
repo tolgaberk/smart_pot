@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
+#include "ArduinoJson.h"
 
 #ifndef API_H
 #define API_H
@@ -10,13 +11,14 @@ private:
     String baseUrl;
     WiFiClient client;
     HTTPClient http;
+    int retryCount = 5;
 
 public:
     Api(String newBaseUrl);
     ~Api();
 
-    String get(String endPoint);
+    DynamicJsonDocument get(String endPoint);
     int registerDevice();
-    String post(String endPoint, String data);
+    DynamicJsonDocument post(String endPoint, String data);
 };
 #endif

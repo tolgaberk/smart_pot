@@ -12,8 +12,8 @@ export default {
 
   after: {
     all: [],
-    find: [addImage()],
-    get: [],
+    find: [addImage('blogId')],
+    get: [addImage('blogId')],
     create: [],
     update: [],
     patch: [],

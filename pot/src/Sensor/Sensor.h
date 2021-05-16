@@ -1,4 +1,5 @@
 #include "./PotData/PotData.h"
+#include "./Multiplexer/Multiplexer.h"
 #include <Arduino.h>
 
 #define SAMPLING_INTERVAL 500
@@ -7,14 +8,16 @@ class Sensor
 {
 protected:
     float value;
-    int pin;
-    int controlPin;
+    int pinNumberOnMp;
     unsigned long last_read;
     PotData *potData;
+    Multiplexer *mp;
+    void setActive();
 
 public:
-    Sensor(int pin, int controlPin, PotData *pot_data);
+    Sensor(int pinNumberOnMp, PotData *pot_data, Multiplexer *mp);
     Sensor();
     ~Sensor();
-    virtual float *readValue();
+    int getPinOnMp();
+    float *readValue();
 };

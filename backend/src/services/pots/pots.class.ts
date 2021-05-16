@@ -1,32 +1,32 @@
-import { Params } from '@feathersjs/feathers';
+import { Paginated, Params } from '@feathersjs/feathers';
 import { SequelizeServiceOptions, Service } from 'feathers-sequelize';
 import { Application, IPot } from '../../declarations';
-
-export class Pots extends Service {
-  model;
-  app;
+export class Pots extends Service<IPot> {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(options: Partial<SequelizeServiceOptions>, app: Application) {
+  constructor(
+    options: Partial<SequelizeServiceOptions>,
+    private app: Application,
+  ) {
     super(options);
-    this.app = app;
-    this.model = options.Model;
   }
 
-  async create(data: { data: string }, params: Params): Promise<any> {
-    const [ip, MAC] = data.data.split('&&');
+  async create(data: Partial<IPot>, params: Params): Promise<any> {
+    const [ip, MAC] = (data as unknown as { data: string }).data.split('&&');
     const pot: Partial<IPot> = { ip, MAC };
-    const exists = await this.find({ query: { MAC } });
-    console.log(exists);
-    let id;
-    if ((exists as any).data[0]) {
-      const patched = await this.model.update({ ip }, { where: { MAC } });
-      console.log(patched);
-      id = patched[0];
+    console.log(pot);
+    const exists = (await this.find({ query: { MAC } })) as Paginated<IPot>;
+    const existingRecord = exists.data[0];
+    if (existingRecord) {
+      try {
+        const patched = await this.patch(existingRecord.id, { ip });
+        return { id: (patched as IPot).id };
+      } catch (err) {
+        console.error(err);
+        return { err: err.toString() };
+      }
     } else {
-      const created = await super.create(pot, params);
-      id = created.id;
+      const created = (await super.create(pot, params)) as IPot;
+      return { id: created.id };
     }
-
-    return id;
   }
 }

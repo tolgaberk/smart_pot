@@ -50,7 +50,7 @@ app.use('/', express.static(app.get('public')));
 
 app.configure(express.rest());
 
-app.configure(socketio(socket));
+app.configure(socketio((io) => socket(io, app)));
 app.configure(sequelize);
 app.configure(routes);
 app.configure(serviceless_models);

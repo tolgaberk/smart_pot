@@ -31,6 +31,7 @@ interface IPot {
   updatedAt: string;
   current_flower: number;
   data?: IPotData[];
+  flower?: IFlower;
 }
 
 interface IPotData {
@@ -55,4 +56,11 @@ interface IUser {
   password: string;
   createdAt: string;
   updatedAt: string;
+}
+
+interface IBlog {
+  id: number;
+  text: string;
+  title: string;
+  images: IImage[];
 }

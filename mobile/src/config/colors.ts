@@ -6,6 +6,6 @@ const colors = {
   text: '#000',
   black: '#000',
   whiteText: '#fff',
-  card: '#e8e8e8',
+  card: '#f8f8f8',
 };
 export default colors;

@@ -36,6 +36,13 @@
         "password": ""
       }
     ],
-    "liveServer.settings.multiRootWorkspaceName": "code"
+    "liveServer.settings.multiRootWorkspaceName": "code",
+    "files.associations": {
+      "functional": "cpp",
+      "mutex": "cpp",
+      "streambuf": "cpp",
+      "regex": "cpp",
+      "*.ipp": "cpp"
+    }
   }
 }

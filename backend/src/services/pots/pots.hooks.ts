@@ -1,5 +1,6 @@
 import addFlower from '../../hooks/add-flower-image';
 import addAllInfo from '../../hooks/add_all_info';
+import currentFlowerUpdated from '../../hooks/current-flower-updated';
 export default {
   before: {
     all: [],
@@ -17,7 +18,7 @@ export default {
     get: [addAllInfo()],
     create: [],
     update: [],
-    patch: [],
+    patch: [currentFlowerUpdated()],
     remove: [],
   },
 

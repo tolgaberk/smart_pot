@@ -8,8 +8,13 @@ private:
     bool isWorking;
     unsigned long last_watered_at;
 
+    void turnOn();
+    void turnOff();
+
 public:
-    Pump(int pin, PotData *potData);
+    Pump();
+    void setup(int pin, PotData *potData);
+    void forceWork();
     void work();
     ~Pump();
 };

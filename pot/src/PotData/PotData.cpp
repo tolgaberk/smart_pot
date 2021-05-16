@@ -1,9 +1,12 @@
 #include "PotData.h"
+#include "ArduinoJson.h"
 
-PotData::PotData(Api *newApi)
+PotData::PotData(Api *newApi, PlantReference *plant_ref)
 {
     api = newApi;
     last_sent_time = 0;
+    universal_time = 0;
+    plant_reference = plant_ref;
 }
 
 PotData::~PotData()
@@ -12,7 +15,7 @@ PotData::~PotData()
     environment_humidity = 0;
     soil_moisture = 0;
     tank_filled_ratio = 0;
-    // environment_light_density = 0;
+    environment_light_density = 0;
     close_light_density = 0;
 }
 
@@ -23,34 +26,47 @@ void PotData::setPotId(int id)
 
 void PotData::setIsWatering(bool val)
 {
+    bool oldVal = last_time_watered;
     last_time_watered = val;
+    if (oldVal == false && val == true)
+    {
+        this->sendPotData(true);
+    }
 }
 
 String PotData::toString()
 {
-    String stringified = "{ \n" +
-                         (String) " \"environment_temp\" :" + (String)environment_temp +
-                         ", \n\t\"environment_humidity\" :" + environment_humidity +
-                         ", \n\t\"soil_moisture\" : " + soil_moisture +
-                         ", \n\t\"tank_filled_ratio\" :" + tank_filled_ratio +
-                         //  ", \n\t\"environment_light_density\" : " + environment_light_density +
-                         ", \n\t\"close_light_density\" : " + close_light_density +
-                         ", \n\t\"last_time_watered\" : " + last_time_watered +
-                         ", \n\t\"is_lights_open\" : " + is_lights_open +
-                         ", \n\t\"pot_id\" : " + pot_id +
-                         "\n}";
+    DynamicJsonDocument doc(1024);
+
+    doc["environment_temp"] = this->environment_temp;
+    doc["environment_humidity"] = this->environment_humidity;
+    doc["soil_moisture"] = this->soil_moisture;
+    doc["tank_filled_ratio"] = this->tank_filled_ratio;
+    doc["environment_light_density"] = this->environment_light_density;
+    doc["close_light_density"] = this->close_light_density;
+    doc["last_time_watered"] = this->last_time_watered;
+    doc["is_lights_open"] = this->is_lights_open;
+    doc["pot_id"] = this->pot_id;
+
+    String stringified;
+    serializeJsonPretty(doc, stringified);
     return stringified;
 }
 
-void PotData::sendPotData(bool force)
+DynamicJsonDocument PotData::sendPotData(bool force)
 {
     if (((millis() - last_sent_time) > REQUEST_INTERVAL) || force)
     {
         String pot = this->toString();
         Serial.println(pot);
-        last_sent_time = millis();
-        api->post("pot-data", pot);
+        this->last_sent_time = millis();
+        DynamicJsonDocument doc = api->post("pot-data", pot);
+        double time = doc["time"];
+        this->universal_time = (unsigned long)time;
+        return doc;
     }
+    DynamicJsonDocument doc(0);
+    return doc;
 }
 
 void PotData::print()
