@@ -30,6 +30,7 @@ void Pump::turnOff()
 void Pump::forceWork()
 {
     this->turnOn();
+    this->potData->sendPotData(true);
     delay(WATERING_DURATION);
     this->turnOff();
 }
@@ -37,9 +38,9 @@ void Pump::forceWork()
 void Pump::work()
 {
 
-    int min_moisture = potData->plant_reference->getMinMoisture();
-    int max_moisture = potData->plant_reference->getMaxMoisture();
-    int current_moisture = potData->soil_moisture;
+    int min_moisture = this->potData->plant_reference->getMinMoisture();
+    int max_moisture = this->potData->plant_reference->getMaxMoisture();
+    int current_moisture = this->potData->soil_moisture;
 
     if (current_moisture < min_moisture && current_moisture < max_moisture)
     {

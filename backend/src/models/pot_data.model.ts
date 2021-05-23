@@ -7,7 +7,7 @@ import { Application, IPotData } from '../declarations';
 export default function (app: Application): typeof Model {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
 
-  const potData = sequelizeClient.define<Model<IPotData, any>>(
+  const potData = sequelizeClient.define(
     'pot_data',
     {
       id: {

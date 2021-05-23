@@ -1,8 +1,9 @@
-import { Params } from '@feathersjs/feathers';
+import { Paginated, Params } from '@feathersjs/feathers';
 import { SequelizeServiceOptions, Service } from 'feathers-sequelize';
 import { Application, IPotData } from '../../declarations';
 import { Command } from './Command';
 
+const POT_DATA_RECORD_INTERVAL_IN_MINUTES = 5;
 export class PotData extends Service<IPotData> {
   app: Application;
   CommandQueue: Record<number, Command[]> = {};
@@ -13,13 +14,39 @@ export class PotData extends Service<IPotData> {
   }
 
   //@ts-ignore
-  async create(data: IPotData, params: Params): Promise<Command> {
+  async create(
+    data: IPotData & { is_forced?: boolean },
+    params: Params,
+  ): Promise<Command> {
     console.log(data);
     const potId = data.pot_id;
 
     data = await this.setLastTimeWatered(potId, data);
 
-    await super.create(data, params);
+    if (data.is_forced) {
+      await super.create(data, params);
+    } else {
+      const [lastRecord] = (
+        (await this.find({
+          query: {
+            $limit: 1,
+            $sort: {
+              createdAt: -1,
+            },
+          },
+        })) as Paginated<IPotData>
+      ).data;
+      if (lastRecord) {
+        const duration = Date.now() - lastRecord.createdAt.getTime();
+        const durationInMins = duration / 1000 / 60;
+        console.log('not recorded');
+        if (durationInMins > POT_DATA_RECORD_INTERVAL_IN_MINUTES) {
+          await super.create(data, params);
+        } else {
+          console.log('not recorded');
+        }
+      }
+    }
 
     let toBeReturnedCommand = new Command('no_command');
     if (this.CommandQueue[potId] && this.CommandQueue[potId].length) {

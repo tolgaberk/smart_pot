@@ -27,7 +27,7 @@ public:
     void setPotId(int id);
     void setIsWatering(bool val);
     DynamicJsonDocument sendPotData(bool force = false);
-    String toString();
+    String toString(bool isForced = false);
     void print();
 };
 #endif

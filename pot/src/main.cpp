@@ -10,7 +10,7 @@
 #include "Multiplexer/Multiplexer.h"
 #include "PlantReference/PlantReference.h"
 
-Api api{"http://192.168.1.109:9876"};
+Api api{"http://smartpot.online"};
 
 PlantReference plant_info;
 

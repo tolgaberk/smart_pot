@@ -34,7 +34,7 @@ void PotData::setIsWatering(bool val)
     }
 }
 
-String PotData::toString()
+String PotData::toString(bool isForced = false)
 {
     DynamicJsonDocument doc(1024);
 
@@ -47,17 +47,21 @@ String PotData::toString()
     doc["last_time_watered"] = this->last_time_watered;
     doc["is_lights_open"] = this->is_lights_open;
     doc["pot_id"] = this->pot_id;
+    if (isForced)
+    {
+        doc["is_forced"] = true;
+    }
 
     String stringified;
     serializeJsonPretty(doc, stringified);
     return stringified;
 }
 
-DynamicJsonDocument PotData::sendPotData(bool force)
+DynamicJsonDocument PotData::sendPotData(bool force = false)
 {
     if (((millis() - last_sent_time) > REQUEST_INTERVAL) || force)
     {
-        String pot = this->toString();
+        String pot = this->toString(force);
         Serial.println(pot);
         this->last_sent_time = millis();
         DynamicJsonDocument doc = api->post("pot-data", pot);

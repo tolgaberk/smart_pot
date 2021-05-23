@@ -15,6 +15,8 @@ interface IPotData {
   is_lights_open: boolean;
   pot_id: number;
   current_flower_id: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ICamera {
