@@ -23,6 +23,10 @@ export default class RTCSocket {
   ) {
     this.socket = io(this.url);
     this.socket.on("connect", this.onConnect.bind(this));
+    this.socket.on("error", this.onIOError.bind(this));
+  }
+  onIOError() {
+    window.location.reload();
   }
 
   //
