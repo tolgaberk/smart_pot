@@ -31,13 +31,20 @@ const RegisterPotModal: FC<RegisterPotModalProps> = ({
 
       const id = getReduxState().authState.id;
       if (id) {
-        await service.patch(
+        const res = await service.patch(
           null,
           { user_id: id },
           { query: { MAC: text.current } },
         );
-        onRegistered();
-        onClose();
+        if (res.length > 0) {
+          onRegistered();
+          onClose();
+        } else {
+          Alert.alert(
+            'Saksı bulunamadı.',
+            'Lütfen doğru kodu girdiğinizden emin olun.',
+          );
+        }
       }
     } catch (err) {
       console.log(err);

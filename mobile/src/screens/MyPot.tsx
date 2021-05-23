@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/core';
+import { useIsFocused, useRoute } from '@react-navigation/core';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
@@ -35,6 +35,7 @@ const MyPot: FC<MyPotProps> = () => {
   const [searchingStream, setSearchingStream] = useState<
     'not_searching' | 'searching' | 'found'
   >('not_searching');
+
   const getter = useCallback(() => {
     Api.feathers
       .service('pots')
@@ -57,6 +58,16 @@ const MyPot: FC<MyPotProps> = () => {
     getter();
   }, [getter]);
 
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (!isFocused) {
+      setStream(undefined);
+      setPot(undefined);
+      setLoading(true);
+      setSearchingStream('not_searching');
+    }
+  }, [isFocused]);
+
   const reload = () => {
     setLoading(true);
     getter();
@@ -66,17 +77,27 @@ const MyPot: FC<MyPotProps> = () => {
   const searchTimeoutRef = useRef<number>(0);
 
   const initRTC = () => {
-    searchTimeoutRef.current = setTimeout(() => {
-      setSearchingStream('not_searching');
-      Api.socket.emit('disconnect');
-    }, 5000);
-    Api.initRTC((newStream) => {
-      setStream((_) => newStream);
-      clearTimeout(searchTimeoutRef.current);
-      scrollRef.current?.scrollTo({ x: 0 });
-      setSearchingStream('found');
-    });
-    setSearchingStream('searching');
+    let timeouted = false;
+    if (pot) {
+      searchTimeoutRef.current = setTimeout(() => {
+        setSearchingStream('not_searching');
+        Alert.alert(
+          'Yayın Bulunamadı!',
+          'Saksınızın doğru çalıştığından emin olunuz...',
+        );
+        timeouted = true;
+      }, 5000);
+
+      Api.initRTC((newStream) => {
+        if (!timeouted && newStream) {
+          setStream((_) => newStream);
+          clearTimeout(searchTimeoutRef.current);
+          scrollRef.current?.scrollTo({ x: 0 });
+          setSearchingStream('found');
+        }
+      }, pot?.MAC);
+      setSearchingStream('searching');
+    }
   };
 
   const closeRTC = () => {
@@ -96,9 +117,12 @@ const MyPot: FC<MyPotProps> = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const closeModal = () => setModalVisible(false);
   const [canWater, setCanWater] = useState<boolean>(true);
+  const [canToggle, setCanToggle] = useState<boolean>(true);
   const water = () => {
     if (canWater) {
-      Api.socket.emit('water', pot?.id);
+      Api.socket.emit('water', pot?.id, (res: string) => {
+        console.log({ res });
+      });
       setCanWater(false);
       setTimeout(() => {
         setCanWater(true);
@@ -111,9 +135,15 @@ const MyPot: FC<MyPotProps> = () => {
     }
   };
   const toggleLights = () => {
-    Api.socket.emit('light_toggle', pot?.id, (res: string) => {
-      console.log({ res });
-    });
+    if (canToggle) {
+      Api.socket.emit('light_toggle', pot?.id, (res: string) => {
+        console.log({ res });
+      });
+      setCanToggle(false);
+      setTimeout(() => {
+        setCanToggle(true);
+      }, 5000);
+    }
   };
 
   const [nameModalVisible, setNameModalVisible] = useState(false);
@@ -124,7 +154,7 @@ const MyPot: FC<MyPotProps> = () => {
         leftIsBack
         title={pot?.name ?? ''}
         Right={() => (
-          <View style={{ flexDirection: 'row' }}>
+          <View style={styles.btnn}>
             <Pressable
               style={pressableStyle({ padding: 4 })}
               onPress={() => {
@@ -182,6 +212,7 @@ const MyPot: FC<MyPotProps> = () => {
               <Button
                 style={[generalStyles.flex, styles.btn]}
                 text="Işık Aç/Kapa"
+                disabled={!canToggle}
                 onPress={toggleLights}
               />
             </View>
@@ -217,6 +248,7 @@ const MyPot: FC<MyPotProps> = () => {
 export default MyPot;
 
 export const styles = StyleSheet.create({
+  btnn: { flexDirection: 'row' },
   btn: { marginHorizontal: 24 },
   buttonContainer: { flexDirection: 'row', justifyContent: 'space-evenly' },
   sliderImage: {
