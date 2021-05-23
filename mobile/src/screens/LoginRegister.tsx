@@ -22,6 +22,7 @@ const LoginRegister: FC<LoginRegisterProps> = () => {
 
   const login = async (params: typeof initialValues) => {
     try {
+      console.log(params);
       await asyncDispatch(loginAction(params));
       navigation.navigate('App');
     } catch (error) {}
@@ -29,11 +30,13 @@ const LoginRegister: FC<LoginRegisterProps> = () => {
   const goWithoutLogin = () => {
     navigation.navigate('App');
   };
-  const initialValues = {
-    email: 'test@test.com',
-    password: 'testTest',
-    from: 'login',
-  } as const;
+  const initialValues = __DEV__
+    ? ({
+        email: 'test@test.com',
+        password: 'test123',
+        from: 'login',
+      } as const)
+    : ({ email: '', password: '', from: 'login' } as const);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

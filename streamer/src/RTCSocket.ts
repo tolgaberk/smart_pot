@@ -79,6 +79,9 @@ export default class RTCSocket {
   async onWatcher(id: string) {
     this.logger(`New Watcher Added => ${id}`);
     const peerConnection = new RTCPeerConnection(this.config);
+    if (this.peerConnections[id]) {
+      this.peerConnections[id].close();
+    }
     this.peerConnections[id] = peerConnection;
 
     if (this.videoStream) {
@@ -103,7 +106,7 @@ export default class RTCSocket {
 
   onDisonnectPeer(id: string) {
     this.logger(`Watcher disconnected from stream => ${id}`);
-    this.peerConnections[id].close();
+    if (this.peerConnections[id]) this.peerConnections[id].close();
     delete this.peerConnections[id];
   }
 

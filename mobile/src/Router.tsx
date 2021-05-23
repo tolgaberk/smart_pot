@@ -5,7 +5,7 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
+import { DrawerActions, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -62,18 +62,21 @@ const CustomDrawer = (
       ),
     },
   };
+  const isLoggedIn = getReduxState().authState.isLoggedIn;
   return (
     <DrawerContentScrollView
       {...filteredProps}
       contentContainerStyle={generalStyles.flex}>
       <DrawerItemList {...filteredProps} />
       <View style={generalStyles.flex} />
-      {getReduxState().authState.isLoggedIn ? (
+      {isLoggedIn ? (
         <Pressable
           style={styles.cikisYapButton}
           onPress={async () => {
             await asyncDispatch(logoutAction());
             props.navigation.navigate('Login');
+            props.navigation.dispatch(DrawerActions.closeDrawer());
+            props.navigation.dispatch(DrawerActions.jumpTo('Flowers'));
           }}>
           <Text style={{ color: colors.whiteText }}>Çıkış yap</Text>
         </Pressable>
@@ -82,6 +85,8 @@ const CustomDrawer = (
           style={styles.cikisYapButton}
           onPress={async () => {
             props.navigation.navigate('Login');
+            props.navigation.dispatch(DrawerActions.closeDrawer());
+            props.navigation.dispatch(DrawerActions.jumpTo('Flowers'));
           }}>
           <Text style={{ color: colors.whiteText }}>Giriş yap</Text>
         </Pressable>
@@ -91,6 +96,7 @@ const CustomDrawer = (
 };
 
 function DrawerNavigator() {
+  const isLoggedIn = getReduxState().authState.isLoggedIn;
   return (
     <Drawer.Navigator drawerContent={CustomDrawer} detachInactiveScreens={true}>
       <Drawer.Screen
@@ -105,30 +111,34 @@ function DrawerNavigator() {
         name="Flowers"
         component={FlowersList}
       />
-      <Drawer.Screen
-        options={{
-          drawerLabel: 'Üyeliğim',
-          drawerIcon: ({ color }) => (
-            <View style={styles.iconContainer}>
-              <User color={color} />
-            </View>
-          ),
-        }}
-        name="MyMembership"
-        component={MyMembership}
-      />
-      <Drawer.Screen
-        options={{
-          drawerLabel: 'Saksılarım',
-          drawerIcon: ({ color }) => (
-            <View style={styles.iconContainer}>
-              <Codepen color={color} />
-            </View>
-          ),
-        }}
-        name="Pots"
-        component={MyPots}
-      />
+      {isLoggedIn && (
+        <>
+          <Drawer.Screen
+            options={{
+              drawerLabel: 'Üyeliğim',
+              drawerIcon: ({ color }) => (
+                <View style={styles.iconContainer}>
+                  <User color={color} />
+                </View>
+              ),
+            }}
+            name="MyMembership"
+            component={MyMembership}
+          />
+          <Drawer.Screen
+            options={{
+              drawerLabel: 'Saksılarım',
+              drawerIcon: ({ color }) => (
+                <View style={styles.iconContainer}>
+                  <Codepen color={color} />
+                </View>
+              ),
+            }}
+            name="Pots"
+            component={MyPots}
+          />
+        </>
+      )}
       <Drawer.Screen
         options={{
           drawerLabel: 'Blog',

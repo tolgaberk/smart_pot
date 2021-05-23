@@ -28,7 +28,6 @@ interface MyPotProps {}
 
 const MyPot: FC<MyPotProps> = () => {
   const route = useRoute();
-  const id = (route.params as any)?.id;
   const [stream, setStream] = useState<MediaStream>();
   const [pot, setPot] = useState<IPot>();
   const [loading, setLoading] = useState(true);
@@ -36,15 +35,20 @@ const MyPot: FC<MyPotProps> = () => {
     'not_searching' | 'searching' | 'found'
   >('not_searching');
 
-  const getter = useCallback(() => {
-    Api.feathers
-      .service('pots')
-      .get(id)
-      .then((res: IPot) => {
-        setPot(res);
-        setLoading(false);
-      });
-  }, [id]);
+  const id = (route.params as any)?.id;
+  const isFocused = useIsFocused();
+
+  const getter = useCallback(async () => {
+    if (isFocused) {
+      const res = await Api.feathers.service('pots').get(id);
+      setPot(res);
+      setLoading(false);
+    } else {
+      setPot(undefined);
+      closeRTC();
+      setLoading(true);
+    }
+  }, [id, isFocused]);
 
   useEffect(() => {
     const service = Api.feathers.service('pot_data');
@@ -57,16 +61,6 @@ const MyPot: FC<MyPotProps> = () => {
   useEffect(() => {
     getter();
   }, [getter]);
-
-  const isFocused = useIsFocused();
-  useEffect(() => {
-    if (!isFocused) {
-      setStream(undefined);
-      setPot(undefined);
-      setLoading(true);
-      setSearchingStream('not_searching');
-    }
-  }, [isFocused]);
 
   const reload = () => {
     setLoading(true);
@@ -104,7 +98,6 @@ const MyPot: FC<MyPotProps> = () => {
     setSearchingStream('not_searching');
     Api.closeRTC();
     setStream(undefined);
-    Api.socket.emit('disconnect');
   };
 
   const btnText =

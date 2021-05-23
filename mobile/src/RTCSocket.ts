@@ -56,10 +56,14 @@ export class RTCSocket {
     socketId: string,
     description: RTCSessionDescriptionType,
   ) {
-    await this.peer.setRemoteDescription(description);
-    const sdp = await this.peer.createAnswer();
-    await this.peer.setLocalDescription(sdp);
-    this.socket.emit('answer', socketId, this.peer.localDescription);
+    try {
+      await this.peer.setRemoteDescription(description);
+      const sdp = await this.peer.createAnswer();
+      await this.peer.setLocalDescription(sdp);
+      this.socket.emit('answer', socketId, this.peer.localDescription);
+    } catch (err) {
+      console.log('setRemoteDescriptionError', err);
+    }
   }
 
   openSocket() {

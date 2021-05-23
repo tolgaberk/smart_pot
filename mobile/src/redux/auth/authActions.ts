@@ -38,6 +38,11 @@ export const loginAction: ActionCreator<ActionParams['login']> = (
       throw 'error';
     }
   } else {
+    if (params.email.length <= 0 || params.password.length <= 0) {
+      return Alert.alert('HATA', 'Alanları doldurduğunuzdan emin olunuz.', [
+        { text: 'Tamam' },
+      ]);
+    }
     try {
       const user = await Api.feathers.service('users').create(params);
       res = await Api.feathers.authenticate({
