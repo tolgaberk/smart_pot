@@ -112,10 +112,10 @@ export default class RTCSocket {
 
   //
 
-  onAnswer(id: string, description: RTCSessionDescriptionInit) {
+  async onAnswer(id: string, description: RTCSessionDescriptionInit) {
     this.logger(`Watcher Answered => ${id}`);
     try {
-      this.peerConnections[id].setRemoteDescription(description);
+      await this.peerConnections[id].setRemoteDescription(description);
     } catch (err) {
       window.location.reload();
     }
