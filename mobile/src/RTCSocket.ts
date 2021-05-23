@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import {
   EventOnAddStream,
   MediaStream,
@@ -63,6 +64,10 @@ export class RTCSocket {
       this.socket.emit('answer', socketId, this.peer.localDescription);
     } catch (err) {
       console.log('setRemoteDescriptionError', err);
+      Alert.alert(
+        'Bir sorun oluştu!',
+        'Lütfen daha sonra tekrar deneyiniz.\nSaksınızı yeniden başlatmayı deneyebilirsiniz.',
+      );
     }
   }
 
