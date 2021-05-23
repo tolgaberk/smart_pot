@@ -15,7 +15,12 @@ export const Header: FC<{
     <View style={styles.headerContainer}>
       <View style={styles.left}>
         <Pressable
-          style={pressableStyle()}
+          hitSlop={24}
+          android_ripple={{ color: colors.primary, radius: 20 }}
+          style={pressableStyle({
+            alignItems: 'center',
+            justifyContent: 'center',
+          })}
           onPress={() =>
             leftIsBack
               ? navigation.goBack()
@@ -56,7 +61,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     textAlign: 'center',
-    fontWeight: '500',
+    fontWeight: '600',
     color: colors.primary,
     fontSize: 32,
     textAlignVertical: 'center',

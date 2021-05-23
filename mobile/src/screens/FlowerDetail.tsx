@@ -65,7 +65,7 @@ const FlowerDetail: FC<FlowerDetailProps> = () => {
       <ScrollView>
         <ScrollView
           horizontal
-          style={{ flex: 1, flexGrow: 1 }}
+          style={styles.scrollView}
           snapToInterval={dimensions.width}
           showsHorizontalScrollIndicator={false}>
           {flower.images.map((image, i) => (
@@ -98,6 +98,7 @@ const FlowerDetail: FC<FlowerDetailProps> = () => {
 export default FlowerDetail;
 
 export const styles = StyleSheet.create({
+  scrollView: { flex: 1, flexGrow: 1 },
   textContainer: { paddingHorizontal: 16 },
   sectionHeader: { fontSize: 24, color: colors.primary, paddingBottom: 8 },
   sectionContainer: { alignItems: 'center', paddingTop: 16 },
