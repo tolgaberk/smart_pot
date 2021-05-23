@@ -1,5 +1,5 @@
 {
-  "host": "smartpot.online",
+  "host": "localhost",
   "port": 9876,
   "public": "../public/",
   "paginate": {

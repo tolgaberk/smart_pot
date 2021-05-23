@@ -1,4 +1,5 @@
 {
-  "host": "smart-pot-backend-app.feathersjs.com",
-  "port": "PORT"
+  "host": "smartpot.online",
+  "port": "9876",
+  "mysql": "mysql://tolga:Tolgaberk99@localhost:3306/smart_pot"
 }
