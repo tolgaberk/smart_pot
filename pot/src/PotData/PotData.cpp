@@ -34,7 +34,7 @@ void PotData::setIsWatering(bool val)
     }
 }
 
-String PotData::toString(bool isForced = false)
+String PotData::toString(bool isForced)
 {
     DynamicJsonDocument doc(1024);
 
@@ -57,7 +57,7 @@ String PotData::toString(bool isForced = false)
     return stringified;
 }
 
-DynamicJsonDocument PotData::sendPotData(bool force = false)
+DynamicJsonDocument PotData::sendPotData(bool force)
 {
     if (((millis() - last_sent_time) > REQUEST_INTERVAL) || force)
     {

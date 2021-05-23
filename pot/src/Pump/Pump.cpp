@@ -30,7 +30,6 @@ void Pump::turnOff()
 void Pump::forceWork()
 {
     this->turnOn();
-    this->potData->sendPotData(true);
     delay(WATERING_DURATION);
     this->turnOff();
 }
