@@ -24,6 +24,7 @@ export class PotData extends Service<IPotData> {
     data = await this.setLastTimeWatered(potId, data);
 
     if (data.is_forced) {
+      console.log('FORCELY RECORDED');
       await super.create(data, params);
     } else {
       const [lastRecord] = (
@@ -39,11 +40,11 @@ export class PotData extends Service<IPotData> {
       if (lastRecord) {
         const duration = Date.now() - lastRecord.createdAt.getTime();
         const durationInMins = duration / 1000 / 60;
-        console.log('not recorded');
         if (durationInMins > POT_DATA_RECORD_INTERVAL_IN_MINUTES) {
+          console.log('RECORDED');
           await super.create(data, params);
         } else {
-          console.log('not recorded');
+          console.log('NOT RECORDED');
         }
       }
     }
