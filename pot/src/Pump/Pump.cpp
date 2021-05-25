@@ -2,6 +2,7 @@
 
 #define WATERING_DURATION 2000
 #define WATERING_INTERVAL_LIMIT 15000
+#define MAX_MOISTURE_LIMIT 700
 
 Pump::Pump()
 {
@@ -39,10 +40,11 @@ void Pump::work()
 
     int min_moisture = this->potData->plant_reference->getMinMoisture();
     int max_moisture = this->potData->plant_reference->getMaxMoisture();
-    int current_moisture = this->potData->soil_moisture;
+    int current_moisture = (this->potData->soil_moisture / MAX_MOISTURE_LIMIT) * 100;
 
     if (current_moisture < min_moisture && current_moisture < max_moisture)
     {
+
         if ((millis() - last_watered_at) > WATERING_INTERVAL_LIMIT)
         {
             this->turnOn();

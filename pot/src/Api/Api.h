@@ -18,7 +18,7 @@ public:
     ~Api();
 
     DynamicJsonDocument get(String endPoint);
-    int registerDevice();
+    DynamicJsonDocument registerDevice();
     DynamicJsonDocument post(String endPoint, String data);
 };
 #endif

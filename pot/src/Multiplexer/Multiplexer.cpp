@@ -50,8 +50,8 @@ void Multiplexer::test()
 
 void Multiplexer::setControlPins(bool c1, bool c2)
 {
-    digitalWrite(this->c1, c1 ? HIGH : LOW);
-    digitalWrite(this->c2, c2 ? HIGH : LOW);
+    digitalWrite(this->c1, c1 == 1 ? HIGH : LOW);
+    digitalWrite(this->c2, c2 == 1 ? HIGH : LOW);
 }
 
 Multiplexer::~Multiplexer() {}

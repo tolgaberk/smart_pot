@@ -7,7 +7,7 @@ Api::Api(String newBaseUrl)
     http.addHeader("Content-Type", "application/json");
 }
 
-int Api::registerDevice()
+DynamicJsonDocument Api::registerDevice()
 {
     String localIp = WiFi.localIP().toString();
     String MAC = WiFi.macAddress();
@@ -24,7 +24,7 @@ int Api::registerDevice()
         delay(100);
         this->registerDevice();
     }
-    return response["id"].as<int>();
+    return response;
 }
 
 DynamicJsonDocument Api::get(String endPoint)

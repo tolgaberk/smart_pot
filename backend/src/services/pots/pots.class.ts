@@ -18,8 +18,13 @@ export class Pots extends Service<IPot> {
     const existingRecord = exists.data[0];
     if (existingRecord) {
       try {
-        const patched = await this.patch(existingRecord.id, { ip });
-        return { id: (patched as IPot).id };
+        const patched = (await this.patch(existingRecord.id, { ip })) as IPot;
+        const flower = await this.app
+          .get('sequelizeClient')
+          .models.plant_reference.findOne({
+            where: { flower_id: patched.current_flower },
+          });
+        return { id: (patched as IPot).id, flower };
       } catch (err) {
         console.error(err);
         return { err: err.toString() };

@@ -18,9 +18,9 @@ PotData globalPotData{&api, &plant_info};
 
 Multiplexer mp{D5, D6};
 
-Sensor closeLightSensor{0, &globalPotData, &mp};
-Sensor soilMoistureSensor{1, &globalPotData, &mp};
-Sensor tankWaterLevelSensor{3, &globalPotData, &mp};
+Sensor closeLightSensor{3, &globalPotData, &mp};
+Sensor soilMoistureSensor{0, &globalPotData, &mp};
+// Sensor tankWaterLevelSensor{1, &globalPotData, &mp};
 
 Pump pump;
 
@@ -28,6 +28,8 @@ Lights lights;
 
 DHTesp envTempHumidSensor;
 WiFiManager wifiManager;
+
+int runCommand(DynamicJsonDocument res);
 
 void setup()
 {
@@ -39,7 +41,7 @@ void setup()
   lights.setup(D1, &globalPotData);
   pump.setup(D2, &globalPotData);
 
-  globalPotData.setPotId(api.registerDevice());
+  globalPotData.setPotIdAndCurrentPlant(api.registerDevice());
 
   envTempHumidSensor.setup(D7, DHTesp::DHT11);
   mp.setup();
@@ -47,9 +49,16 @@ void setup()
 
 void loop()
 {
-  // mp.test();
+  // // // mp.test();
+  // Serial.print("soil moisture sensor => ");
+  // Serial.println(*soilMoistureSensor.readValue());
+  // delay(200);
+  // // Serial.println("");
+  // // Serial.print("close light sensor => ");
+  // // Serial.println(*closeLightSensor.readValue());
+  // // delay(200);
   globalPotData.soil_moisture = *soilMoistureSensor.readValue();
-  globalPotData.tank_filled_ratio = *tankWaterLevelSensor.readValue();
+  // globalPotData.tank_filled_ratio = *tankWaterLevelSensor.readValue();
   globalPotData.close_light_density = *closeLightSensor.readValue();
 
   float envHumid = envTempHumidSensor.getHumidity();
@@ -65,9 +74,14 @@ void loop()
   }
 
   lights.work();
+  pump.work();
 
   DynamicJsonDocument res = globalPotData.sendPotData();
+  runCommand(res);
+}
 
+int runCommand(DynamicJsonDocument res)
+{
   if (!res.isNull())
   {
     String command = res["command"].as<String>();
@@ -87,6 +101,8 @@ void loop()
       {
         plant_info.setAll(res["args"]);
       }
+      return 1;
     }
   }
+  return -1;
 }

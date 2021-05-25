@@ -19,9 +19,10 @@ PotData::~PotData()
     close_light_density = 0;
 }
 
-void PotData::setPotId(int id)
+void PotData::setPotIdAndCurrentPlant(DynamicJsonDocument doc)
 {
-    pot_id = id;
+    pot_id = doc["id"].as<int>();
+    plant_reference->setAll(doc["flower"]);
 }
 
 void PotData::setIsWatering(bool val)
@@ -64,7 +65,9 @@ DynamicJsonDocument PotData::sendPotData(bool force)
         String pot = this->toString(force);
         Serial.println(pot);
         this->last_sent_time = millis();
+        digitalWrite(LED_BUILTIN, HIGH);
         DynamicJsonDocument doc = api->post("pot-data", pot);
+        digitalWrite(LED_BUILTIN, LOW);
         double time = doc["time"];
         this->universal_time = (unsigned long)time;
         return doc;

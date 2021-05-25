@@ -2,7 +2,7 @@
 #include "./Multiplexer/Multiplexer.h"
 #include <Arduino.h>
 
-#define SAMPLING_INTERVAL 500
+#define SAMPLING_INTERVAL 1
 
 class Sensor
 {

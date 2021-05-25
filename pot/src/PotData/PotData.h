@@ -24,7 +24,7 @@ public:
     PlantReference *plant_reference;
     PotData(Api *newapi, PlantReference *plant_ref);
     ~PotData();
-    void setPotId(int id);
+    void setPotIdAndCurrentPlant(DynamicJsonDocument doc);
     void setIsWatering(bool val);
     DynamicJsonDocument sendPotData(bool force = false);
     String toString(bool isForced = false);

@@ -1,6 +1,7 @@
 #include "Lights.h"
 
-#define ILLUMINATION_LIMIT 150
+#define FULL_ILLUMINATION_LIMIT 200
+#define START_ILLUMINATION_LIMIT 400
 #define FORCE_TIMEOUT 5
 
 Lights::Lights()
@@ -34,11 +35,25 @@ void Lights::turnOn()
 {
     this->isWorking = true;
     this->potData->is_lights_open = true;
+    int lightDensity = this->potData->close_light_density;
     if (this->forced)
     {
         this->potData->sendPotData(true);
+        lightDensity = 0;
     }
-    digitalWrite(pin, HIGH);
+
+    if (lightDensity < FULL_ILLUMINATION_LIMIT)
+    {
+        digitalWrite(pin, HIGH);
+    }
+    else
+    {
+        int closenessToFullIllumination = lightDensity - FULL_ILLUMINATION_LIMIT;
+
+        int mappedVal = map(closenessToFullIllumination, 200, 0, 0, 1024);
+        Serial.println(mappedVal);
+        analogWrite(pin, mappedVal);
+    }
 };
 
 void Lights::turnOff()
@@ -62,7 +77,7 @@ void Lights::work()
             Serial.println("LIGHT FORCE SET TIMEOUTED");
             this->forced = false;
 
-            bool should_be_on = this->potData->close_light_density < ILLUMINATION_LIMIT;
+            bool should_be_on = this->potData->close_light_density < START_ILLUMINATION_LIMIT;
 
             if (should_be_on)
             {
@@ -80,7 +95,7 @@ void Lights::work()
 
     if (!forced)
     {
-        bool should_be_on = this->potData->close_light_density < ILLUMINATION_LIMIT;
+        bool should_be_on = this->potData->close_light_density < START_ILLUMINATION_LIMIT;
 
         if (should_be_on)
         {
