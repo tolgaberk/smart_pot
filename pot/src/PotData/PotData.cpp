@@ -17,6 +17,7 @@ PotData::~PotData()
     tank_filled_ratio = 0;
     environment_light_density = 0;
     close_light_density = 0;
+    universal_time = 0;
 }
 
 void PotData::setPotIdAndCurrentPlant(DynamicJsonDocument doc)

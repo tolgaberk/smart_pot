@@ -6,18 +6,18 @@
 
 class Sensor
 {
-protected:
+private:
     float value;
     int pinNumberOnMp;
     unsigned long last_read;
     PotData *potData;
     Multiplexer *mp;
     void setActive();
+    int getPinOnMp();
 
 public:
     Sensor(int pinNumberOnMp, PotData *pot_data, Multiplexer *mp);
     Sensor();
     ~Sensor();
-    int getPinOnMp();
     float *readValue();
 };

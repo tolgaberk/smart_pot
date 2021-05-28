@@ -10,9 +10,17 @@ private:
     bool isWorking;
     bool forced;
     unsigned long force_start_time;
+    unsigned long cumulative_light_exposure;
+    unsigned long last_loop_time;
+    bool over_exposed;
+    bool sunlight_is_enough;
 
     void turnOn();
     void turnOff();
+    void checkDay();
+    void switchLights();
+
+    int getDarknessDensity();
 
 public:
     Lights();

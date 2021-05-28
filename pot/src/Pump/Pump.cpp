@@ -2,7 +2,16 @@
 
 #define WATERING_DURATION 2000
 #define WATERING_INTERVAL_LIMIT 15000
-#define MAX_MOISTURE_LIMIT 700
+
+#define MOISTURE_LEVEL_MAXED 800
+#define MOISTURE_LEVEL_NOMINAL 400
+#define MOISTURE_LEVEL_CRITICAL 200
+#define MOISTURE_LEVEL_NO_MOISTURE 50
+
+#define WATER_LEVEL_MAXED 900
+#define WATER_LEVEL_NOMINAL 800
+#define WATER_LEVEL_CRITICAL 200
+#define WATER_LEVEL_NO_WATER 50
 
 Pump::Pump()
 {
@@ -40,9 +49,13 @@ void Pump::work()
 
     int min_moisture = this->potData->plant_reference->getMinMoisture();
     int max_moisture = this->potData->plant_reference->getMaxMoisture();
-    int current_moisture = (this->potData->soil_moisture / MAX_MOISTURE_LIMIT) * 100;
+    int current_moisture = (this->potData->soil_moisture / MOISTURE_LEVEL_NOMINAL) * 100;
 
-    if (current_moisture < min_moisture && current_moisture < max_moisture)
+    bool shouldWater = current_moisture < min_moisture && current_moisture < max_moisture;
+
+    bool canWater = this->potData->tank_filled_ratio > WATER_LEVEL_CRITICAL;
+
+    if (canWater && shouldWater)
     {
 
         if ((millis() - last_watered_at) > WATERING_INTERVAL_LIMIT)

@@ -20,7 +20,8 @@ Multiplexer mp{D5, D6};
 
 Sensor closeLightSensor{3, &globalPotData, &mp};
 Sensor soilMoistureSensor{0, &globalPotData, &mp};
-// Sensor tankWaterLevelSensor{1, &globalPotData, &mp};
+Sensor tankWaterLevelSensor{2, &globalPotData, &mp};
+Sensor environmentLightSensor{1, &globalPotData, &mp};
 
 Pump pump;
 
@@ -49,17 +50,10 @@ void setup()
 
 void loop()
 {
-  // // // mp.test();
-  // Serial.print("soil moisture sensor => ");
-  // Serial.println(*soilMoistureSensor.readValue());
-  // delay(200);
-  // // Serial.println("");
-  // // Serial.print("close light sensor => ");
-  // // Serial.println(*closeLightSensor.readValue());
-  // // delay(200);
   globalPotData.soil_moisture = *soilMoistureSensor.readValue();
-  // globalPotData.tank_filled_ratio = *tankWaterLevelSensor.readValue();
+  globalPotData.tank_filled_ratio = *tankWaterLevelSensor.readValue();
   globalPotData.close_light_density = *closeLightSensor.readValue();
+  globalPotData.environment_light_density = *environmentLightSensor.readValue();
 
   float envHumid = envTempHumidSensor.getHumidity();
   if (!isnan(envHumid))
@@ -74,7 +68,7 @@ void loop()
   }
 
   lights.work();
-  pump.work();
+  // pump.work();
 
   DynamicJsonDocument res = globalPotData.sendPotData();
   runCommand(res);
