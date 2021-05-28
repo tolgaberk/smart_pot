@@ -20,8 +20,12 @@ export default (options = {}): Hook => {
         const [flower] = await seq.models.flowers.findAll({
           where: { id: flowerId },
         });
+        const [flower_reference] = await seq.models.plant_reference.findAll({
+          where: { flower_id: flowerId },
+        });
         returnObj.images = images;
         returnObj.flower = flower;
+        returnObj.flower_reference = flower_reference;
       }
 
       if (pot.id) {

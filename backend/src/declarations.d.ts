@@ -18,6 +18,13 @@ interface IPotData {
   createdAt: Date;
   updatedAt: Date;
 }
+interface IFlowerReference {
+  min_temp: number;
+  max_temp: number;
+  min_light_exposure: number;
+  min_moisture: number;
+  max_moisture: number;
+}
 
 export interface ICamera {
   data: { id: string; data: string };
@@ -45,6 +52,7 @@ interface IPot {
   current_flower?: number;
   data?: IPotData[];
   flower?: IFlower;
+  flower_reference?: IFlowerReference;
 }
 
 interface IFlower {
