@@ -55,7 +55,7 @@ void Lights::turnOn()
     {
 
         int mappedVal = map(darknessDensity, ILLUMINATION_START_TRESHOLD, FULL_POWERED_LIGHTS_THRESHOLD, 0, 1024);
-        Serial.print(mappedVal);
+        // Serial.print(mappedVal);
         if (mappedVal < 20)
         {
             analogWrite(pin, 20);
@@ -104,18 +104,18 @@ int Lights::getDarknessDensity()
 
 void Lights::work()
 {
-    Serial.print(this->sunlight_is_enough);
-    Serial.print("\t");
-    Serial.print(this->over_exposed);
-    Serial.print("\t");
-    Serial.print(this->last_loop_time);
-    Serial.print("\t");
-    Serial.print(this->cumulative_light_exposure);
-    Serial.print("\t");
-    Serial.print(this->isWorking);
-    Serial.print("\t");
-    Serial.print(this->getDarknessDensity());
-    Serial.print("\t");
+    // Serial.print(this->sunlight_is_enough);
+    // Serial.print("\t");
+    // Serial.print(this->over_exposed);
+    // Serial.print("\t");
+    // Serial.print(this->last_loop_time);
+    // Serial.print("\t");
+    // Serial.print(this->cumulative_light_exposure);
+    // Serial.print("\t");
+    // Serial.print(this->isWorking);
+    // Serial.print("\t");
+    // Serial.print(this->getDarknessDensity());
+    // Serial.print("\t");
 
     this->sunlight_is_enough = this->getDarknessDensity() < ILLUMINATION_START_TRESHOLD;
 
@@ -140,7 +140,7 @@ void Lights::work()
 
     this->checkDay();
 
-    Serial.println("");
+    // Serial.println("");
 }
 
 void Lights::switchLights()

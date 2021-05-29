@@ -68,7 +68,7 @@ void loop()
   }
 
   lights.work();
-  // pump.work();
+  pump.work();
 
   DynamicJsonDocument res = globalPotData.sendPotData();
   runCommand(res);

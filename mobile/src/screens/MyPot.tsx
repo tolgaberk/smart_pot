@@ -23,6 +23,7 @@ import { pressableStyle } from '../helpers/pressableStyle';
 import SetCurrentFlowerModal from '../components/SetCurrentFlowerModal';
 import { Text } from '../components';
 import ChangeNameOfPotModal from '../components/ChangeNameOfPot';
+import { FlowerInfo } from '../components/FlowerInfo';
 
 interface MyPotProps {}
 
@@ -52,6 +53,7 @@ const MyPot: FC<MyPotProps> = () => {
 
   useEffect(() => {
     const service = Api.feathers.service('pot_data');
+
     service.on('created', getter);
     return () => {
       service.removeListener('created', getter);
@@ -195,6 +197,10 @@ const MyPot: FC<MyPotProps> = () => {
               <Text style={styles.podIntoTitle}>Saksı Bilgileri</Text>
               <PotInfo pot={pot} />
             </View>
+            <View style={styles.potInfoCardContainer}>
+              <Text style={styles.podIntoTitle}>Aktif çiçek bilgileri</Text>
+              <FlowerInfo flower={pot.flower_reference} />
+            </View>
             <View style={styles.buttonContainer}>
               <Button
                 disabled={!canWater}
@@ -260,7 +266,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.background,
     margin: 8,
     flex: 1,
-    marginTop: 16,
+    marginVertical: 16,
     paddingTop: 4,
     borderRadius: 4,
   },

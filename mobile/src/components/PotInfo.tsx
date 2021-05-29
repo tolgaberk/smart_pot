@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import dayjs from 'dayjs';
+import { Text } from '.';
 
 export const potInfoKeyNameMap = {
   MAC: 'MAC Adresi',
@@ -41,7 +42,7 @@ export function PotInfo({ pot }: { pot: IPot }) {
 const styles = StyleSheet.create({
   coupleTextTitle: { fontWeight: '700' },
   coupleTextRow: {
-    marginVertical: 4,
+    marginVertical: 1,
     paddingHorizontal: 16,
     paddingVertical: 4,
     flexDirection: 'row',

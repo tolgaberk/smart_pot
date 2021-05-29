@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import dayjs from 'dayjs';
 import colors from '../config/colors';
+import { Text } from '.';
 
 export const potDataShownKeyMap = {
   id: 'Kayıt No',
@@ -15,7 +16,41 @@ export const potDataShownKeyMap = {
   is_lights_open: 'Işık durumu',
   createdAt: 'Kayıt tarihi',
 };
+const clampPercent = (num: number) => Math.min(Math.max(num, 0), 100);
+const addPercentSign = (val: string | number) => val + ' %';
+const addCelcius = (val: string | number) => val + ' °C';
 
+function formatVal(
+  key: keyof typeof potDataShownKeyMap,
+  val: string | number,
+): string | number {
+  if (['createdAt', 'last_time_watered'].includes(key)) {
+    return dayjs(val).fromNow();
+  }
+  if (['is_lights_open'].includes(key)) {
+    return val ? 'Açık' : 'Kapalı';
+  }
+  if (['close_light_density', 'environment_light_density'].includes(key)) {
+    return addPercentSign(clampPercent(((val as number) /= 10)));
+  }
+
+  if (['soil_moisture'].includes(key)) {
+    return addPercentSign(clampPercent(((val as number) / 400) * 100));
+  }
+
+  if (['tank_filled_ratio'].includes(key)) {
+    (val as number) /= 900;
+    return addPercentSign(clampPercent((val as number) * 100).toFixed(1));
+  }
+  if (['environment_humidity'].includes(key)) {
+    return addPercentSign(val);
+  }
+  if (['environment_temp'].includes(key)) {
+    return addCelcius(val);
+  }
+
+  return val;
+}
 export function PotDatas({ pot }: { pot: IPot }) {
   return (
     <>
@@ -36,15 +71,7 @@ export function PotDatas({ pot }: { pot: IPot }) {
                     <Text style={styles.coupleTextTitle}>
                       {potDataShownKeyMap[key]}
                     </Text>
-                    <Text>
-                      {key === 'createdAt' || key === 'last_time_watered'
-                        ? dayjs(value).fromNow()
-                        : key === 'is_lights_open'
-                        ? value
-                          ? 'Açık'
-                          : 'Kapalı'
-                        : value}
-                    </Text>
+                    <Text>{formatVal(key, value)}</Text>
                   </View>
                 );
               }
