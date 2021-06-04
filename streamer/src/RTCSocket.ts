@@ -42,7 +42,7 @@ export default class RTCSocket {
         this.video.srcObject = stream;
         this.videoStream = stream;
       } catch (err) {
-        console.log("Something went wrong!", err);
+        console.log("Something went wrong!", JSON.stringify(err));
       }
     }
   }
