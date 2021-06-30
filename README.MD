@@ -1,1 +1,1 @@
-# Smart Pot MonoRepo
+# Smart Pot
